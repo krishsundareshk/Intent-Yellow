@@ -61,3 +61,7 @@
   3. Cleaned and deduplicated files: deleted redundant copies of CSV and JSON files from `results/eda/` so that all tables reside cleanly and exclusively in `results/eda_tables/`.
   4. Removed transient `__pycache__` artifacts.
   5. Committed changes and pushed to branch `EDA`.
+
+## Entry 7: Save eda_evidence_dashboard.md in Yellow Workspace
+- **User Request**: Store this eda_evidence_dashboard.md file inside the Yellow folder.
+- **Action**: Copied `eda_evidence_dashboard.md` directly into `/home/krish/Yellow/eda_evidence_dashboard.md`, committed the file to branch `EDA`, and pushed to GitHub.
