@@ -2,3 +2,4 @@ __pycache__/
 *.pyc
 .venv/
 results/system_v1/cache/
+*.zip
