@@ -1,10 +1,10 @@
 # Dashboard Data Verification Checks
 
-Eight numbers presented on the dashboard cross-verified against underlying CSV files:
+Eight numbers presented on the reconstructed dashboard cross-verified against underlying CSV files:
 
 1. **Total Dataset Rows**:
    - Dashboard: 37,000 (30,000 Train + 4,000 Dev + 3,000 Test)
-   - Source: `results/eda/integrity_checks.csv` (`train_row_count`, `dev_row_count`, `test_row_count`)
+   - Source: `results/eda/integrity_checks.csv`
    - Verification: **MATCH**
 
 2. **Number of Taxonomy Intents**:
@@ -15,11 +15,11 @@ Eight numbers presented on the dashboard cross-verified against underlying CSV f
 3. **Train Class Imbalance Ratio**:
    - Dashboard: 13.5x (`delivery_delay`: 4,385 vs `promo_code_issue`: 325)
    - Source: `results/eda/label_counts.csv`
-   - Verification: **MATCH** (4385 / 325 = 13.492)
+   - Verification: **MATCH** (4,385 / 325 = 13.492)
 
-4. **Silver Error Rate Overall (SRS 300)**:
-   - Dashboard: 8.0% (95% Wilson CI: [5.4%, 11.6%])
-   - Source: `results/eda/label_noise_estimate.csv` (slice `overall_train_srs_300`: error_rate = 0.08, ci_95_low = 0.0543, ci_95_high = 0.1163)
+4. **Overall Out-of-Fold Disagreement Rate**:
+   - Dashboard: 13.79% (95% Wilson CI: [13.40%, 14.18%])
+   - Source: `results/eda/label_noise_estimate.csv` (slice `overall_train_oof_cv`: error_rate = 0.1379, ci_95_low = 0.1340, ci_95_high = 0.1418)
    - Verification: **MATCH**
 
 5. **Train Abbreviation Share**:
