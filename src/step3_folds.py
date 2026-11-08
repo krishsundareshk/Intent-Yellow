@@ -9,11 +9,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import StratifiedGroupKFold
 
-from preprocess import preprocess_text
-from src.s0_guard_and_splits import DATA
-
-ROOT = Path(__file__).resolve().parent.parent
-RESULTS = ROOT / "results"
+from preprocess import DATA, RESULTS, preprocess_text
 
 
 def run():

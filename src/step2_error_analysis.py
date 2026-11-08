@@ -19,16 +19,81 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, confusion_matrix, f1_score
 from sentence_transformers import SentenceTransformer
 
-from preprocess import preprocess_text, is_empty_or_non_alnum, EMOJI_PICTO_RE
-from src.s0_guard_and_splits import DATA, RESULTS_V1, load_intents, HINDI_ROMAN, MULTI_CUES, MIND_CHANGE_CUES
-from src.s3_s4_s5_pipeline import (
-    CACHE_DIR, detect_cues_and_split_clauses, apply_clause_rules, train_mlp_plain, predict_mlp_logits
+import torch.nn as nn
+from torch.utils.data import DataLoader, TensorDataset
+from preprocess import (
+    DATA,
+    EMOJI_PICTO_RE,
+    HINDI_ROMAN,
+    MIND_CHANGE_CUES,
+    MULTI_CUES,
+    is_empty_or_non_alnum,
+    load_intents,
+    preprocess_text,
 )
 
 ROOT = Path(__file__).resolve().parent.parent
+CACHE_DIR = ROOT / "results" / "cache"
 ERR_DIR = ROOT / "results" / "error_analysis"
 ERR_DIR.mkdir(parents=True, exist_ok=True)
 DEV_LOG_PATH = ROOT / "results" / "dev_eval_log.csv"
+
+
+def detect_cues_and_split_clauses(norm_text: str) -> dict:
+    for cue in sorted(MIND_CHANGE_CUES, key=len, reverse=True):
+        m = re.search(r"\b" + re.escape(cue) + r"\b", norm_text)
+        if m:
+            c1 = norm_text[: m.start()].strip(" ,.!?;:-")
+            c2 = norm_text[m.end() :].strip(" ,.!?;:-")
+            if len(c1.split()) >= 2 and len(c2.split()) >= 2:
+                return {"type": "mind_change", "cue": cue, "clauses": [c1, c2]}
+    for cue in sorted(MULTI_CUES, key=len, reverse=True):
+        m = re.search(r"\b" + re.escape(cue) + r"\b", norm_text)
+        if m:
+            c1 = norm_text[: m.start()].strip(" ,.!?;:-")
+            c2 = norm_text[m.end() :].strip(" ,.!?;:-")
+            if len(c1.split()) >= 2 and len(c2.split()) >= 2:
+                return {"type": "multi", "cue": cue, "clauses": [c1, c2]}
+    return {"type": "none", "cue": None, "clauses": [norm_text]}
+
+
+def apply_clause_rules(info: dict, clause_preds: list[str], full_text: str) -> str:
+    if info["type"] == "mind_change":
+        return clause_preds[-1]
+    if info["type"] == "multi":
+        if info["cue"] == "but before that":
+            return clause_preds[-1]
+        if clause_preds[0] == "talk_to_agent" and len(clause_preds) > 1:
+            return clause_preds[1]
+        return clause_preds[0]
+    return clause_preds[0]
+
+
+def train_mlp_plain(X_tr, y_tr, sample_weights, class_weights, num_classes=12, epochs=20, seed=42):
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = nn.Sequential(nn.Linear(X_tr.shape[1], 256), nn.ReLU(), nn.Dropout(0.2), nn.Linear(256, num_classes)).to(device)
+    opt = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
+    crit = nn.CrossEntropyLoss(weight=torch.tensor(class_weights, dtype=torch.float32, device=device), reduction="none")
+    ds = TensorDataset(torch.tensor(X_tr, dtype=torch.float32), torch.tensor(y_tr, dtype=torch.long), torch.tensor(sample_weights, dtype=torch.float32))
+    loader = DataLoader(ds, batch_size=256, shuffle=True)
+    model.train()
+    for _ in range(epochs):
+        for bx, by, bw in loader:
+            bx, by, bw = bx.to(device), by.to(device), bw.to(device)
+            opt.zero_grad()
+            loss = (crit(model(bx), by) * bw).mean()
+            loss.backward()
+            opt.step()
+    model.eval()
+    return model
+
+
+def predict_mlp_logits(model, X):
+    device = next(model.parameters()).device
+    with torch.no_grad():
+        return model(torch.tensor(X, dtype=torch.float32, device=device)).cpu().numpy()
 
 
 def log_dev_eval(candidate: str, macro_f1: float, top1: float, notes: str = ""):
@@ -56,7 +121,7 @@ def run():
 
     train = pd.read_csv(DATA / "train.csv")
     dev = pd.read_csv(DATA / "dev.csv")
-    part_df = pd.read_csv(RESULTS_V1 / "s2_train_partition.csv")
+    part_df = pd.read_csv(ROOT / "results" / "scd_partition_flags.csv")
 
     train_norm = [preprocess_text(t) for t in train["utterance"]]
     dev_norm = [preprocess_text(t) for t in dev["utterance"]]

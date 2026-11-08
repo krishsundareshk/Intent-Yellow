@@ -6,6 +6,7 @@ Single preprocessing and guard function used at train and inference time:
 4. Collapse whitespace
 Order: normalise, then guard. If nothing alphanumeric is left, return `out_of_scope` without calling any model.
 """
+import json
 import re
 import unicodedata
 from pathlib import Path
@@ -16,6 +17,35 @@ ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "data"
 RESULTS = ROOT / "results"
 RESULTS.mkdir(parents=True, exist_ok=True)
+
+HINDI_ROMAN = {
+    "kahan", "hai", "mera", "meri", "mere", "karo", "karna", "nahi", "nahin", "paisa", "kat",
+    "gaya", "par", "batao", "baat", "karni", "chahiye", "galat", "kaise", "kab", "milega",
+    "insaan", "se", "aur", "abhi", "bhi", "tha", "thi", "raha", "rahi", "kyun", "kyu", "ek",
+    "do", "liya", "diya", "bhai", "kuch", "bohot", "bahut", "jaldi", "aaya", "aa", "wapas",
+}
+
+MULTI_CUES = ["and also", "also", "plus", "but", "aur", "lekin", "but before that", "and by the way"]
+MIND_CHANGE_CUES = [
+    "actually", "never mind", "nvm", "on second thought", "scratch that",
+    "rehne do", "chhod do", "forget it", "forget that", "sorry, wrong thing",
+    "ignore what i just said",
+]
+
+
+def load_intents() -> list[str]:
+    with open(DATA / "taxonomy.json", encoding="utf-8") as f:
+        tax = json.load(f)
+    return [i["name"] for i in tax["intents"]]
+
+
+def is_hinglish_text(s: str) -> bool:
+    words = set(re.findall(r"[a-zA-Z]+", s))
+    return len(words.intersection(HINDI_ROMAN)) >= 1 or any("\u0900" <= ch <= "\u097F" for ch in s)
+
+
+def has_cue_words(s: str, cues: list[str]) -> bool:
+    return any(re.search(r"\b" + re.escape(c) + r"\b", s) for c in cues)
 
 # Comprehensive regex covering Unicode emoji blocks, dingbats, symbols, transport/map, variation selectors, and pictographs
 EMOJI_PICTO_RE = re.compile(

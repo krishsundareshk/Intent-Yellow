@@ -1,5 +1,0 @@
-{
-  "chosen_encoder": "all-MiniLM-L6-v2",
-  "e5_hinglish_f1": 0.6679,
-  "minilm_hinglish_f1": 0.776
-}

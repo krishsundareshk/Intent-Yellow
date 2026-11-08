@@ -35,8 +35,10 @@ if str(ROOT) not in sys.path:
 from preprocess import preprocess_text
 from src.step4_oof_predictions import SEEDS, build_lexical_features, train_mlp_fold
 
+from sentence_transformers import SentenceTransformer
+
 DATA_DIR = ROOT / "data"
-CACHE_DIR = ROOT / "results" / "system_v1" / "cache"
+CACHE_DIR = ROOT / "results" / "cache"
 OUT_DIR = ROOT / "results"
 
 
@@ -101,8 +103,13 @@ def main() -> None:
 
     oof_lex = np.load(OUT_DIR / "oof_lexical_probs.npy")
     oof_mlp = np.load(OUT_DIR / "oof_mlp_probs.npy")
-    oof_mlp_seeds = np.load(OUT_DIR / "oof_mlp_probs_seeds.npy")
-    X_emb = np.load(CACHE_DIR / "minilm_step1_train.npy")
+    tr_emb_path = CACHE_DIR / "minilm_step1_train.npy"
+    if tr_emb_path.exists():
+        X_emb = np.load(tr_emb_path)
+    else:
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        st_model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2", device=device)
+        X_emb = st_model.encode(norm_texts, batch_size=256, normalize_embeddings=True, show_progress_bar=False).astype(np.float32)
 
     # 1. Identify candidate noisy rows
     row_indices = np.arange(n_samples)

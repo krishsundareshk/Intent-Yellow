@@ -31,8 +31,10 @@ if str(ROOT) not in sys.path:
 
 from preprocess import preprocess_text
 
+from sentence_transformers import SentenceTransformer
+
 DATA_DIR = ROOT / "data"
-CACHE_DIR = ROOT / "results" / "system_v1" / "cache"
+CACHE_DIR = ROOT / "results" / "cache"
 OUT_DIR = ROOT / "results"
 
 SEEDS = [42, 43, 44]
@@ -136,8 +138,14 @@ def main() -> None:
     for idx, name in enumerate(intents):
         print(f"  {name:20s}: p_train={p_train[idx]:.4f}, p_dev={p_dev[idx]:.4f}, w={class_imp_weights[idx]:.4f}")
 
-    # Load Step-1 cached MiniLM embeddings
-    X_emb = np.load(CACHE_DIR / "minilm_step1_train.npy")
+    # Load or compute Step-1 MiniLM embeddings
+    tr_emb_path = CACHE_DIR / "minilm_step1_train.npy"
+    if tr_emb_path.exists():
+        X_emb = np.load(tr_emb_path)
+    else:
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        st_model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2", device=device)
+        X_emb = st_model.encode(texts, batch_size=256, normalize_embeddings=True, show_progress_bar=False).astype(np.float32)
     assert X_emb.shape == (n_samples, 384)
 
     # 1. Lexical head OOF

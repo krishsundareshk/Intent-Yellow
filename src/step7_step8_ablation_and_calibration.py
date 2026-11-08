@@ -54,7 +54,7 @@ from src.clause_router import parse_clauses, resolve_clause_probs
 from src.step4_oof_predictions import SEEDS, ResidualMLP, train_mlp_fold
 
 DATA_DIR = ROOT / "data"
-CACHE_DIR = ROOT / "results" / "system_v1" / "cache"
+CACHE_DIR = ROOT / "results" / "cache"
 OUT_DIR = ROOT / "results"
 
 
@@ -227,18 +227,17 @@ def main() -> None:
     clause2idx = {c: i for i, c in enumerate(unique_clauses)}
     print(f"Encoding {len(unique_clauses)} unique extracted clauses (and test set if not cached) with MiniLM...")
 
-    X_emb_tr = np.load(CACHE_DIR / "minilm_step1_train.npy")
-    X_emb_dv = np.load(CACHE_DIR / "minilm_step1_dev.npy")
-
     device = "cuda" if torch.cuda.is_available() else "cpu"
     st_model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2", device=device)
+
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    tr_emb_path = CACHE_DIR / "minilm_step1_train.npy"
+    dv_emb_path = CACHE_DIR / "minilm_step1_dev.npy"
+    X_emb_tr = np.load(tr_emb_path) if tr_emb_path.exists() else st_model.encode(tr_texts, batch_size=256, normalize_embeddings=True, show_progress_bar=False).astype(np.float32)
+    X_emb_dv = np.load(dv_emb_path) if dv_emb_path.exists() else st_model.encode(dv_texts, batch_size=256, normalize_embeddings=True, show_progress_bar=False).astype(np.float32)
+
     clause_embs = st_model.encode(unique_clauses, batch_size=256, normalize_embeddings=True, show_progress_bar=False)
     clause_embs = np.asarray(clause_embs, dtype=np.float32)
-
-    test_emb_path = CACHE_DIR / "minilm_step1_test.npy"
-    if not test_emb_path.exists():
-        X_emb_te = st_model.encode(te_texts, batch_size=256, normalize_embeddings=True, show_progress_bar=False)
-        np.save(test_emb_path, np.asarray(X_emb_te, dtype=np.float32))
 
     # Load Noise Filter flags (Step 5) and Old SCD Partition (Step 7 System F)
     nf_df = pd.read_csv(OUT_DIR / "noise_flags.csv")
@@ -247,7 +246,7 @@ def main() -> None:
     oof_flag_mask[oof_flag_idx] = True
     clean_eval_mask = ~oof_flag_mask
 
-    scd_df = pd.read_csv(ROOT / "results" / "system_v1" / "s2_train_partition.csv")
+    scd_df = pd.read_csv(OUT_DIR / "scd_partition_flags.csv")
     scd_keep_mask = (scd_df["bucket"] != "noisy").to_numpy()
 
     # Load or compute OOF & Dev predictions for each base model variant:
