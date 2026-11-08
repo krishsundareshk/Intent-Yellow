@@ -1,0 +1,17 @@
+cue_category,cue_pattern,matched_rows,coverage_share,overlap_share,silver_conflict_count,silver_conflict_rate
+multi_request,but,1949,0.06497,0.01523,599,0.3073
+multi_request,also,1514,0.05047,0.0104,284,0.1876
+mind_change,actually,414,0.0138,0.01077,49,0.1184
+multi_request,and by the way,211,0.00703,0.00047,29,0.1374
+multi_request,plus,207,0.0069,0.0007,28,0.1353
+multi_request,but before that,204,0.0068,0.0068,21,0.1029
+multi_request,and also,196,0.00653,0.00653,25,0.1276
+mind_change,"sorry, wrong thing",189,0.0063,0.0003,29,0.1534
+mind_change,scratch that,176,0.00587,0.0008,23,0.1307
+mind_change,forget that,175,0.00583,0.0054,20,0.1143
+mind_change,never mind,169,0.00563,0.00527,19,0.1124
+mind_change,"no wait, forget that",161,0.00537,0.00537,19,0.118
+mind_change,actually never mind,157,0.00523,0.00523,19,0.121
+mind_change,forget it,142,0.00473,0.00433,13,0.0915
+mind_change,ignore what i just said,139,0.00463,0.00047,7,0.0504
+mind_change,actually forget it,128,0.00427,0.00427,11,0.0859

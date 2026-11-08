@@ -1,0 +1,5 @@
+model,hf_name,dim,dev_top1,dev_macro_f1,dev_weighted_f1,hinglish_n,hinglish_top1,hinglish_macro_f1,cpu_4thread_p50_ms,cpu_4thread_p95_ms,cpu_4thread_p99_ms
+all-MiniLM-L6-v2,sentence-transformers/all-MiniLM-L6-v2,384,0.8003,0.7843,0.7971,524,0.7767,0.776,4.39,5.47,5.87
+multilingual-e5-small,intfloat/multilingual-e5-small,384,0.7847,0.7431,0.7705,524,0.708,0.6679,6.82,8.6,9.49
+char_wb_2_5_only,sklearn_tfidf_logreg,26423,0.8568,0.848,0.8554,524,0.8569,0.8574,0.61,0.76,0.86
+word_1_2_plus_char_wb_2_5,sklearn_tfidf_logreg,41939,0.859,0.8513,0.858,524,0.8683,0.872,0.97,1.28,1.39

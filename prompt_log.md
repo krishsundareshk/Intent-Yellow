@@ -65,3 +65,21 @@
 ## Entry 7: Save eda_evidence_dashboard.md in Yellow Workspace
 - **User Request**: Store this eda_evidence_dashboard.md file inside the Yellow folder.
 - **Action**: Copied `eda_evidence_dashboard.md` directly into `/home/krish/Yellow/eda_evidence_dashboard.md`, committed the file to branch `EDA`, and pushed to GitHub.
+
+## Entry 8: System Design v1 Implementation, GPU Training, Dev Evaluation & Bottleneck Analysis
+- **User Request**: Check the current architecture (Section 16 System Design v1), create the code files, train on `train.csv` using GPU, test and evaluate on `dev.csv`, and identify the flaws and bottlenecks.
+- **Action**:
+  1. Created modular System v1 implementation in `src/`:
+     - `src/s0_guard_and_splits.py`: S0 guards/normalisation, fixed evaluation function (`labels=intents` with support assertion), and stratified split of `dev.csv` into `audit_300` (300), `dev_cal_1850` (1,850), and `dev_eval_1850` (1,850).
+     - `src/s1_encoder_gate.py`: Compared `all-MiniLM-L6-v2` vs `intfloat/multilingual-e5-small` vs lexical n-gram representations on GPU and 4-thread CPU. MiniLM beat multilingual-e5-small on both overall Macro-F1 (0.7843 vs 0.7431) and Hinglish slice Macro-F1 (0.7760 vs 0.6679) while running faster (4.39ms vs 6.82ms p50 on 4 threads).
+     - `src/s2_partition.py`: Implemented Forouzesh & Thiran (2023) per-class 3-component GMM on `(Acc_i, SCD_z)` at `t* = 2`, plus the 10% random label flip sanity test (achieved 87.90% recall of flipped labels in the noisy bucket with only 1.27% leak into easy).
+     - `src/s3_s4_s5_pipeline.py`: Implemented S3 rule-based clause repair and Snorkel-style cue stats (`s3_cue_snorkel_stats.csv`), Stage-1 semantic & lexical heads, noisy bucket relabelling, Sahayam et al. (2023) Algorithm 2 hard-batch schedule (`E=20, delta=0.5, zeta=38`), logit fusion, temperature scaling, abstain gate, and online clause path.
+     - `src/s7_bottleneck_analysis.py`: Diagnosed and proved the 6 architectural bottlenecks and evaluated Silver vs. Rule-Audited Gold Dev performance (`s7_silver_vs_gold_bottleneck_proof.csv`).
+     - `src/s6_s8_latency_and_taxonomy.py`: Measured 4-thread CPU batch-1 latency (fp32 vs dynamic int8 quantization) and generated `results/system_v1/taxonomy_revised.json` (improving even the naive starter matcher from 0.4105 to 0.5100 Macro-F1).
+- **Flaws / Bottlenecks Discovered**:
+  1. `multilingual-e5-small` underperforms `all-MiniLM-L6-v2` on Romanised Hinglish (0.6679 vs 0.7760 Macro-F1) because Romanised Hindi shares English Latin script + domain terms.
+  2. In S2, inverse-frequency class weights inside the partition MLP inflate gradient variance for minority classes (`account_help`, `promo_code_issue`), pushing up to 50% of their rows into the noisy bucket.
+  3. In S4.3, the `>= 0.90` relabelling threshold discards 2,539 rows (55.4% of noisy bucket), starving minority classes; lowering to `>= 0.70` and retaining the rest at soft weight `0.25` recovers performance.
+  4. In S4.4, Sahayam hard-batch retraining (`delta=0.5`) slightly hurts frozen-embedding MLP heads (`0.7899` vs `0.7969` plain) because the remaining "hard" bucket still contains unflagged silver label noise that gets overfit.
+  5. In S4.5, unstandardized logit fusion sets `alpha = 0.9` toward the lexical head, drowning out the semantic head unless logits are z-normalized before fusion.
+  6. Evaluating S3 Rule Repair + Online Clause Path against uncorrected silver `dev.csv` creates a "Silver Evaluation Illusion" because `dev.csv` violates README Rules 1/2/3/5/6 on 157 rows (3.92%, especially Mind-Change Rule 2). On rule-audited Gold Dev, the Online Clause Path boosts Mind-Change F1 from `0.4664` to `0.9167` and overall Macro-F1 to `0.8915`.

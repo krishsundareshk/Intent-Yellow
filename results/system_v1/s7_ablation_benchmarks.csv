@@ -1,0 +1,13 @@
+model_variant,dev_eval1850_macro_f1,dev_eval1850_top1,dev_eval1850_top3,dev_eval1850_mrr,dev_full4000_macro_f1,dev_full4000_top1,audit300_silver_macro_f1,account_help_f1_eval1850,promo_code_f1_eval1850
+0_Starter_Baseline_FixedEval,0.4117,0.4222,0.7195,0.6618,0.4105,0.4233,0.4176,0.0,0.0
+1_Raw_Silver_Semantic_MLP_Unweighted,0.8214,0.8324,0.9346,0.8891,0.8188,0.8277,0.8482,0.6835,0.7811
+2_Raw_Silver_Semantic_MLP_DevPriorWeighted,0.8211,0.8314,0.9373,0.89,0.8221,0.8303,0.8614,0.7059,0.8
+3_Stage1_Semantic_MLP_EasyHardRepaired,0.797,0.8027,0.9195,0.8683,0.793,0.7993,0.8073,0.7021,0.7892
+4_Final_Semantic_MLP_PlainSchedule,0.7969,0.8032,0.9211,0.869,0.795,0.8017,0.811,0.6802,0.776
+5_Final_Semantic_MLP_SahayamHardBatch,0.7899,0.7968,0.9173,0.8651,0.7872,0.795,0.7983,0.6667,0.766
+6_Lexical_Head_CharWB_Only,0.8408,0.8465,0.9297,0.8956,0.8376,0.8438,0.8359,0.7935,0.8041
+7_Lexical_Head_Word_Plus_CharWB,0.8363,0.8427,0.9308,0.8945,0.8347,0.8413,0.8167,0.776,0.8042
+8_SystemV1_Fused_CharWB_CalibratedGate,0.8293,0.8368,0.9335,0.894,0.8296,0.8365,0.8295,0.7753,0.7826
+9_SystemV1_Fused_CharWB_WithClausePath,0.8472,0.8519,0.9335,0.894,0.8471,0.8515,0.8633,0.8108,0.8168
+10_SystemV1_Enhanced_WordChar_CalibratedGate,0.8271,0.8341,0.9341,0.8923,0.8279,0.8343,0.8328,0.7598,0.7892
+11_SystemV1_Enhanced_WordChar_WithClausePath,0.8473,0.8514,0.9341,0.8923,0.8468,0.8505,0.8688,0.8,0.8229
