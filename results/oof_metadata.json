@@ -1,0 +1,63 @@
+{
+  "n_samples": 30000,
+  "n_classes": 12,
+  "intents": [
+    "order_status",
+    "delivery_delay",
+    "cancel_order",
+    "refund_request",
+    "missing_item",
+    "wrong_item",
+    "payment_failed",
+    "promo_code_issue",
+    "change_address",
+    "account_help",
+    "talk_to_agent",
+    "out_of_scope"
+  ],
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "folds_file": "results/folds.csv",
+  "files": {
+    "lexical_oof_probs": "results/oof_lexical_probs.npy",
+    "mlp_oof_probs_seed_avg": "results/oof_mlp_probs.npy",
+    "mlp_oof_probs_per_seed": "results/oof_mlp_probs_seeds.npy",
+    "per_intent_csv": "results/oof_metrics_per_intent.csv"
+  },
+  "lexical_head": {
+    "unweighted_oof_macro_f1": 0.8046,
+    "importance_weighted_oof_macro_f1": 0.7834,
+    "unweighted_oof_acc": 0.8689,
+    "importance_weighted_oof_acc": 0.825
+  },
+  "minilm_mlp_head_per_seed": {
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "unweighted_oof_macro_f1_per_seed": [
+      0.744,
+      0.7439,
+      0.7436
+    ],
+    "unweighted_oof_macro_f1_mean": 0.7438,
+    "unweighted_oof_macro_f1_std": 0.0002,
+    "importance_weighted_oof_macro_f1_per_seed": [
+      0.7227,
+      0.7224,
+      0.7221
+    ],
+    "importance_weighted_oof_macro_f1_mean": 0.7224,
+    "importance_weighted_oof_macro_f1_std": 0.0002,
+    "importance_weighted_oof_macro_f1_spread": 0.0006
+  },
+  "minilm_mlp_head_3seed_avg": {
+    "unweighted_oof_macro_f1": 0.7435,
+    "importance_weighted_oof_macro_f1": 0.7219
+  },
+  "elapsed_sec": 207.95
+}

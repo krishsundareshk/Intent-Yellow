@@ -1,0 +1,11 @@
+intent_a,intent_b,a_predicted_as_b,b_predicted_as_a,total_confused
+order_status,delivery_delay,21,49,70
+payment_failed,promo_code_issue,20,15,35
+talk_to_agent,out_of_scope,23,9,32
+delivery_delay,cancel_order,13,18,31
+missing_item,wrong_item,21,8,29
+refund_request,payment_failed,14,15,29
+cancel_order,refund_request,11,15,26
+change_address,account_help,7,19,26
+refund_request,missing_item,5,9,14
+payment_failed,account_help,12,1,13

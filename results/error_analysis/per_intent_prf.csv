@@ -1,0 +1,13 @@
+intent,precision,recall,f1,support
+order_status,0.8444,0.92,0.8806,525
+delivery_delay,0.8643,0.8516,0.8579,546
+cancel_order,0.8779,0.8603,0.869,401
+refund_request,0.8699,0.8639,0.8669,441
+missing_item,0.9011,0.8116,0.8541,292
+wrong_item,0.8333,0.8612,0.8471,209
+payment_failed,0.8289,0.7719,0.7994,320
+promo_code_issue,0.8698,0.8068,0.8371,207
+change_address,0.8402,0.9111,0.8742,225
+account_help,0.7981,0.783,0.7905,212
+talk_to_agent,0.8228,0.8566,0.8394,244
+out_of_scope,0.8594,0.873,0.8661,378

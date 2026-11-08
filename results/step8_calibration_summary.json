@@ -1,0 +1,123 @@
+{
+  "best_overall_alpha_on_oof": 0.9,
+  "best_fused_alpha_on_oof": 0.85,
+  "temperature_T": 1.0,
+  "ece_before_temperature": 0.0715,
+  "ece_after_temperature": 0.0715,
+  "abstain_threshold_tau": 0.15,
+  "at_chosen_tau": {
+    "tau": 0.15,
+    "oof_imp_macro_f1": 0.8102,
+    "abstain_rate": 0.0,
+    "oos_precision": 0.8733,
+    "oos_recall": 0.9611,
+    "oos_f1": 0.9151
+  },
+  "alpha_sweep": [
+    {
+      "alpha": 0.0,
+      "oof_imp_f1": 0.7463,
+      "oof_filtered_imp_f1": 0.7918
+    },
+    {
+      "alpha": 0.05,
+      "oof_imp_f1": 0.7517,
+      "oof_filtered_imp_f1": 0.7977
+    },
+    {
+      "alpha": 0.1,
+      "oof_imp_f1": 0.7574,
+      "oof_filtered_imp_f1": 0.8037
+    },
+    {
+      "alpha": 0.15,
+      "oof_imp_f1": 0.7631,
+      "oof_filtered_imp_f1": 0.8098
+    },
+    {
+      "alpha": 0.2,
+      "oof_imp_f1": 0.7717,
+      "oof_filtered_imp_f1": 0.8191
+    },
+    {
+      "alpha": 0.25,
+      "oof_imp_f1": 0.7772,
+      "oof_filtered_imp_f1": 0.825
+    },
+    {
+      "alpha": 0.3,
+      "oof_imp_f1": 0.7838,
+      "oof_filtered_imp_f1": 0.8321
+    },
+    {
+      "alpha": 0.35,
+      "oof_imp_f1": 0.7904,
+      "oof_filtered_imp_f1": 0.8392
+    },
+    {
+      "alpha": 0.4,
+      "oof_imp_f1": 0.7952,
+      "oof_filtered_imp_f1": 0.8442
+    },
+    {
+      "alpha": 0.45,
+      "oof_imp_f1": 0.7989,
+      "oof_filtered_imp_f1": 0.8482
+    },
+    {
+      "alpha": 0.5,
+      "oof_imp_f1": 0.8021,
+      "oof_filtered_imp_f1": 0.8516
+    },
+    {
+      "alpha": 0.55,
+      "oof_imp_f1": 0.8053,
+      "oof_filtered_imp_f1": 0.8551
+    },
+    {
+      "alpha": 0.6,
+      "oof_imp_f1": 0.8068,
+      "oof_filtered_imp_f1": 0.8566
+    },
+    {
+      "alpha": 0.65,
+      "oof_imp_f1": 0.8076,
+      "oof_filtered_imp_f1": 0.8575
+    },
+    {
+      "alpha": 0.7,
+      "oof_imp_f1": 0.8079,
+      "oof_filtered_imp_f1": 0.8578
+    },
+    {
+      "alpha": 0.75,
+      "oof_imp_f1": 0.8085,
+      "oof_filtered_imp_f1": 0.8585
+    },
+    {
+      "alpha": 0.8,
+      "oof_imp_f1": 0.8099,
+      "oof_filtered_imp_f1": 0.86
+    },
+    {
+      "alpha": 0.85,
+      "oof_imp_f1": 0.8102,
+      "oof_filtered_imp_f1": 0.8603
+    },
+    {
+      "alpha": 0.9,
+      "oof_imp_f1": 0.8109,
+      "oof_filtered_imp_f1": 0.861
+    },
+    {
+      "alpha": 0.95,
+      "oof_imp_f1": 0.8109,
+      "oof_filtered_imp_f1": 0.8611
+    },
+    {
+      "alpha": 1.0,
+      "oof_imp_f1": 0.8106,
+      "oof_filtered_imp_f1": 0.8607
+    }
+  ]
+}

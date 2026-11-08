@@ -1,0 +1,9 @@
+slice,support,step2_macro_f1,final_macro_f1,final_top1_acc,delta_macro_f1
+hinglish,524,0.8681,0.9093,0.9046,0.0412
+multi_request,547,0.719,0.8921,0.9013,0.1731
+change_of_mind,141,0.9119,0.9152,0.9149,0.0033
+short_under_4_tokens,65,0.738,0.7696,0.8769,0.0316
+long_over_40_tokens,0,,,,
+long_25_or_more_tokens,194,0.7777,0.8722,0.8814,0.0945
+emoji,101,0.8002,0.8408,0.9109,0.0406
+out_of_scope_true_silver,378,0.0777,0.1394,0.9524,0.0617

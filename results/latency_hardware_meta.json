@@ -1,0 +1,64 @@
+{
+  "hardware": {
+    "cpu_model": "13th Gen Intel(R) Core(TM) i7-13650HX",
+    "physical_cores": 14,
+    "logical_threads": 20,
+    "pinned_threads": 4,
+    "precision": "FP32 (no INT8 quantization)",
+    "ram_budget_gb": 15.0
+  },
+  "benchmarks": [
+    {
+      "system": "Lexical + Clause Router (System B/H)",
+      "path": "single_path",
+      "n_warmup": 100,
+      "n_calls": 1000,
+      "threads": 4,
+      "precision": "FP32",
+      "batched_clauses_in_single_call": true,
+      "p50_ms": 2.339,
+      "p95_ms": 2.548,
+      "p99_ms": 2.678,
+      "mean_ms": 2.356
+    },
+    {
+      "system": "Lexical + Clause Router (System B/H)",
+      "path": "clause_path",
+      "n_warmup": 100,
+      "n_calls": 1000,
+      "threads": 4,
+      "precision": "FP32",
+      "batched_clauses_in_single_call": true,
+      "p50_ms": 2.502,
+      "p95_ms": 2.695,
+      "p99_ms": 2.774,
+      "mean_ms": 2.514
+    },
+    {
+      "system": "Fused Dual-Head + Clause (System E/G)",
+      "path": "single_path",
+      "n_warmup": 100,
+      "n_calls": 1000,
+      "threads": 4,
+      "precision": "FP32",
+      "batched_clauses_in_single_call": true,
+      "p50_ms": 7.927,
+      "p95_ms": 9.929,
+      "p99_ms": 10.81,
+      "mean_ms": 8.043
+    },
+    {
+      "system": "Fused Dual-Head + Clause (System E/G)",
+      "path": "clause_path",
+      "n_warmup": 100,
+      "n_calls": 1000,
+      "threads": 4,
+      "precision": "FP32",
+      "batched_clauses_in_single_call": true,
+      "p50_ms": 12.955,
+      "p95_ms": 14.361,
+      "p99_ms": 15.318,
+      "mean_ms": 12.791
+    }
+  ]
+}

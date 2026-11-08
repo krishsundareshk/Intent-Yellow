@@ -1,0 +1,101 @@
+row_idx,fold,utterance,norm_text,silver_intent,agreed_oof_intent,lex_prob_silver,mlp_prob_silver,lex_prob_agreed,mlp_prob_agreed,confidence_margin,kept_under_15pct_cap
+2226,2,"hi quickcart, delivery partner not moving kindly check.","hi quickcart, delivery partner not moving kindly check.",order_status,delivery_delay,0.0121,0.0629,0.9481,0.8396,0.8564,True
+24969,3,"hello, I'd like a refund for the delivety fee thanks","hello, i'd like a refund for the delivety fee thanks",cancel_order,refund_request,0.0057,0.0231,0.9175,0.8074,0.848,True
+8959,2,yaar need to spek to a person right now lol?,yaar need to spek to a person right now lol?,promo_code_issue,talk_to_agent,0.0031,0.0006,0.9134,0.9642,0.937,True
+6775,0,"hello, aaj delivery bahut late hai asap","hello, aaj delivery bahut late hai asap",order_status,delivery_delay,0.017,0.0122,0.9436,0.9552,0.9348,True
+20880,2,"excuse me, where is my order","excuse me, where is my order",delivery_delay,order_status,0.0154,0.0487,0.9774,0.8891,0.9012,True
+13578,0,"Namaste, is my order packed urgent...","namaste, is my order packed urgent...",delivery_delay,order_status,0.0111,0.0493,0.977,0.8073,0.8619,True
+15418,1,"hi, ok help me","hi, ok help me",talk_to_agent,out_of_scope,0.0174,0.0196,0.9601,0.958,0.9406,True
+10183,4,"hi, part of my order didn't come.","hi, part of my order didn't come.",refund_request,missing_item,0.0051,0.0085,0.976,0.9754,0.9689,True
+1281,2,"Excuse me, initiate a refund for my order please help","excuse me, initiate a refund for my order please help",wrong_item,refund_request,0.008,0.0269,0.919,0.8013,0.8427,True
+10859,2,"Good evening, refund not received yet pls","good evening, refund not received yet pls",account_help,refund_request,0.0003,0.0012,0.9714,0.9156,0.9427,True
+6449,1,hello there. payment is not going through kindly check...,hello there. payment is not going through kindly check...,promo_code_issue,payment_failed,0.0507,0.0159,0.9158,0.9647,0.907,True
+20681,2,"helloo, agent please urgent","helloo, agent please urgent",out_of_scope,talk_to_agent,0.0275,0.0472,0.8387,0.8438,0.8038,True
+24852,3,hello there. I am bored thank you.,hello there. i am bored thank you.,talk_to_agent,out_of_scope,0.0239,0.0141,0.939,0.9373,0.9191,True
+22026,2,food is going to be cold by the time it arrives asap.,food is going to be cold by the time it arrives asap.,cancel_order,delivery_delay,0.009,0.016,0.9704,0.9239,0.9346,True
+6119,1,"hi, the payment page crashed.","hi, the payment page crashed.",refund_request,payment_failed,0.0193,0.0133,0.9667,0.9417,0.9379,True
+27488,4,"Hey, cancel the grocery order I just placed please.","hey, cancel the grocery order i just placed please.",change_address,cancel_order,0.0002,0.0075,0.9861,0.928,0.9532,True
+4364,3,"I don't want a bot, give me a person thanks...","i don't want a bot, give me a person thanks...",refund_request,talk_to_agent,0.0042,0.0012,0.9559,0.9312,0.9408,True
+1373,0,"hi team, let me speak to customer care thanks","hi team, let me speak to customer care thanks",wrong_item,talk_to_agent,0.0005,0.0009,0.9551,0.9783,0.966,True
+5281,4,"excuse me, rider has been stuuck at the same place for 20 minutes aap.","excuse me, rider has been stuuck at the same place for 20 minutes aap.",out_of_scope,delivery_delay,0.0045,0.0094,0.9066,0.8701,0.8814,True
+901,3,"hey, cancel 4255552 right now pls.","hey, cancel 4255552 right now pls.",refund_request,cancel_order,0.0404,0.0603,0.8841,0.8179,0.8006,True
+1233,3,"Hey, did the restaurant accept my order.","hey, did the restaurant accept my order.",delivery_delay,order_status,0.0249,0.0112,0.9447,0.9064,0.9075,True
+6936,4,is my food on the way urgent. sorry for the long messagge. it's been a really long day.,is my food on the way urgent. sorry for the long messagge. it's been a really long day.,delivery_delay,order_status,0.0667,0.052,0.8363,0.823,0.7703,True
+24487,3,don't want this order anymore!!,don't want this order anymore!!,order_status,cancel_order,0.0006,0.0062,0.9833,0.9395,0.958,True
+12623,1,"Hello, order ka status batao pls","hello, order ka status batao pls",delivery_delay,order_status,0.0206,0.0089,0.9758,0.9655,0.9559,True
+1357,3,hello there. why is my delivery taking so long help me,hello there. why is my delivery taking so long help me,wrong_item,delivery_delay,0.0008,0.0009,0.9778,0.9671,0.9716,True
+6653,1,"hey, nice work on the new design my brother told me to try your app.","hey, nice work on the new design my brother told me to try your app.",talk_to_agent,out_of_scope,0.0308,0.0302,0.9006,0.9178,0.8787,True
+3473,2,"hey, this is the third time my order is late. my phone battery is almost dead so please be quick.","hey, this is the third time my order is late. my phone battery is almost dead so please be quick.",refund_request,delivery_delay,0.0098,0.0094,0.8598,0.8653,0.853,True
+16469,2,"Excuse me, order 151131 is delayed again","excuse me, order 151131 is delayed again",cancel_order,delivery_delay,0.0054,0.0302,0.9574,0.8035,0.8626,True
+25445,2,"namaste, can you deliver to a different address help me.","namaste, can you deliver to a different address help me.",account_help,change_address,0.0637,0.0389,0.9225,0.9295,0.8747,True
+17894,0,"good evening, order still not here after 90 mins!!","good evening, order still not here after 90 mins!!",order_status,delivery_delay,0.0093,0.0303,0.9678,0.912,0.9201,True
+2997,0,"Good evening, I want to cancel before the rider picks it up kindly check","good evening, i want to cancel before the rider picks it up kindly check",delivery_delay,cancel_order,0.008,0.0415,0.9475,0.9064,0.9022,True
+22852,1,😡 order cancel karna hai 😡😡,order cancel karna hai,refund_request,cancel_order,0.0144,0.0314,0.977,0.8639,0.8976,True
+26305,2,Hello there. refund not received yet.,hello there. refund not received yet.,cancel_order,refund_request,0.001,0.0031,0.9734,0.9396,0.9544,True
+15121,4,CHANGGE MY TRAIN BOOKING DATE,changge my train booking date,cancel_order,out_of_scope,0.0022,0.0037,0.9481,0.832,0.8871,True
+20005,0,Hello there. movie tickets for tonight please help!!,hello there. movie tickets for tonight please help!!,refund_request,out_of_scope,0.0011,0.0037,0.9392,0.8962,0.9153,True
+25469,1,"namaste, how far is the delivery partner kindly check","namaste, how far is the delivery partner kindly check",payment_failed,order_status,0.0015,0.0037,0.8714,0.8144,0.8403,True
+746,1,"waiting for ages, where is the delivery help me.","waiting for ages, where is the delivery help me.",cancel_order,delivery_delay,0.0032,0.0017,0.9825,0.9456,0.9616,True
+3879,0,kya is the current stats of mea delivery,kya is the current stats of mea delivery,delivery_delay,order_status,0.0126,0.0582,0.9599,0.8213,0.8552,True
+27609,0,"🙏 my food is late, do something ngl","my food is late, do something ngl",cancel_order,delivery_delay,0.006,0.0192,0.9774,0.9215,0.9368,True
+23821,1,"my phone battery is almost daed so pls be quik. hi team, how is your day hlep me","my phone battery is almost daed so pls be quik. hi team, how is your day hlep me",talk_to_agent,out_of_scope,0.0289,0.0504,0.8652,0.9024,0.8441,True
+20951,3,My eggs were not in the grocery bag,my eggs were not in the grocery bag,refund_request,missing_item,0.003,0.0093,0.9834,0.9273,0.9492,True
+17643,0,"Excuse me, is my food on the way please help.","excuse me, is my food on the way please help.",delivery_delay,order_status,0.0393,0.0359,0.9364,0.9095,0.8854,True
+25623,3,Delay in delivery of QC-2346094 please help.,delay in delivery of qc-2346094 please help.,order_status,delivery_delay,0.0111,0.0611,0.9542,0.9163,0.8991,True
+22716,4,"namaste, cancel the order I made 5 minutes ago help me.","namaste, cancel the order i made 5 minutes ago help me.",refund_request,cancel_order,0.0076,0.0143,0.9775,0.9562,0.9559,True
+28856,1,"Hello, book a table at a restaurant.","hello, book a table at a restaurant.",talk_to_agent,out_of_scope,0.0138,0.0066,0.9793,0.9705,0.9647,True
+6540,3,"hello, hello please help.","hello, hello please help.",talk_to_agent,out_of_scope,0.0676,0.1091,0.8398,0.8327,0.7479,True
+500,3,The pizza is not the one I picked,the pizza is not the one i picked,refund_request,wrong_item,0.0048,0.0065,0.9598,0.9371,0.9428,True
+18808,0,"hi, the order is incorrect help me","hi, the order is incorrect help me",missing_item,wrong_item,0.0224,0.033,0.8689,0.8239,0.8187,True
+22324,3,"hi team, received my order but without the fries asap.","hi team, received my order but without the fries asap.",refund_request,missing_item,0.0084,0.0124,0.9706,0.9212,0.9356,True
+7253,2,food is going to be cold by the time it arrives kindly check,food is going to be cold by the time it arrives kindly check,cancel_order,delivery_delay,0.0189,0.0148,0.9432,0.9051,0.9073,True
+13086,0,order QC-6134 is delayed phir se,order qc-6134 is delayed phir se,cancel_order,delivery_delay,0.0024,0.0105,0.9832,0.9011,0.9356,True
+875,3,"hey, where's my food thanks","hey, where's my food thanks",delivery_delay,order_status,0.0151,0.0421,0.9628,0.9092,0.9074,True
+15187,2,this is the third time my order is late please,this is the third time my order is late please,cancel_order,delivery_delay,0.0269,0.0232,0.8946,0.9323,0.8883,True
+12124,4,i have been a loyal customer for three years. any news on my order thx.,i have been a loyal customer for three years. any news on my order thx.,payment_failed,order_status,0.0021,0.003,0.8979,0.8849,0.8888,True
+15264,4,"hey, ??? pls","hey, ??? pls",wrong_item,out_of_scope,0.0131,0.0019,0.8573,0.952,0.8971,True
+16721,0,we have guests coming over in the evening. cancel the pending order.,we have guests coming over in the evening. cancel the pending order.,refund_request,cancel_order,0.0394,0.01,0.9276,0.8581,0.8681,True
+8016,4,"hi quickcart, you promised 30 minutes, it's been 75 please help.","hi quickcart, you promised 30 minutes, it's been 75 please help.",cancel_order,delivery_delay,0.015,0.0176,0.9033,0.9252,0.8979,True
+26904,3,"Hi team, still waiting for my groceries since morning thanks","hi team, still waiting for my groceries since morning thanks",cancel_order,delivery_delay,0.0118,0.0267,0.9685,0.8534,0.8917,True
+18130,1,"good evening, rider has been stuck at the same place for 20 minutes pls","good evening, rider has been stuck at the same place for 20 minutes pls",refund_request,delivery_delay,0.0038,0.0032,0.898,0.8604,0.8757,True
+16688,0,"good evening, the order was supposed to be here already","good evening, the order was supposed to be here already",promo_code_issue,delivery_delay,0.0009,0.0013,0.9506,0.9023,0.9253,True
+23358,1,Asdfgh help me,asdfgh help me,talk_to_agent,out_of_scope,0.0157,0.0557,0.9182,0.8774,0.8621,True
+16609,2,"Hello, can I get an eta for my order asap","hello, can i get an eta for my order asap",delivery_delay,order_status,0.0807,0.1045,0.9,0.8509,0.7828,True
+18456,0,"Hey, order cancel karna hai asap...","hey, order cancel karna hai asap...",wrong_item,cancel_order,0.004,0.0026,0.8789,0.9021,0.8872,True
+16853,3,"Hi team, asdfgh.","hi team, asdfgh.",order_status,out_of_scope,0.0029,0.0013,0.9384,0.8715,0.9028,True
+4902,3,"hi quickcart, the bill shows 4 item, I got 3!!","hi quickcart, the bill shows 4 item, i got 3!!",refund_request,missing_item,0.0068,0.013,0.8379,0.9581,0.8881,True
+22000,0,"hey, need to cancel, I placed the order twice thanks","hey, need to cancel, i placed the order twice thanks",refund_request,cancel_order,0.0204,0.0351,0.9526,0.8726,0.8848,True
+23604,2,"good evening, what's the weather today.","good evening, what's the weather today.",talk_to_agent,out_of_scope,0.0826,0.0188,0.8956,0.9695,0.8818,True
+27684,0,"hello, this is not what I ordereed kidnly check.","hello, this is not what i ordereed kidnly check.",refund_request,wrong_item,0.0052,0.0373,0.9542,0.8204,0.8661,True
+24454,0,suubmit refund reequest for QC7913405,suubmit refund reequest for qc7913405,wrong_item,refund_request,0.0027,0.0062,0.9909,0.9431,0.9626,True
+16708,1,HELLO THETE. DELIVERY TAKING FOREVER THANK YOU,hello thete. delivery taking forever thank you,cancel_order,delivery_delay,0.0129,0.0298,0.9489,0.8921,0.8991,True
+23743,2,I am bored help me,i am bored help me,order_status,out_of_scope,0.0011,1e-04,0.9437,0.9937,0.9681,True
+21657,2,"Hi team, wrong order number on the bag, not mine.","hi team, wrong order number on the bag, not mine.",missing_item,wrong_item,0.0106,0.0412,0.8905,0.8759,0.8573,True
+3663,4,"Hi quickcart, error while paying for QC222590 asap","hi quickcart, error while paying for qc222590 asap",refund_request,payment_failed,0.0846,0.0841,0.8232,0.8115,0.733,True
+25314,4,I want to cancel my order thanms,i want to cancel my order thanms,refund_request,cancel_order,0.0126,0.0152,0.9833,0.9427,0.9491,True
+18757,2,"Hello, need my money returned please help","hello, need my money returned please help",wrong_item,refund_request,0.0011,0.0049,0.9727,0.9486,0.9576,True
+17367,3,"Hi quickcart, my landmark is wrong, can I fix it","hi quickcart, my landmark is wrong, can i fix it",delivery_delay,change_address,0.0008,0.0053,0.9094,0.8275,0.8654,True
+1666,4,"namaste, remove my order, I don't need it.","namaste, remove my order, i don't need it.",refund_request,cancel_order,0.0037,0.0053,0.9882,0.898,0.9386,True
+15558,0,"Hey, it said 25 min and now 1 hr 10 min please help","hey, it said 25 min and now 1 hr 10 min please help",payment_failed,delivery_delay,0.0004,0.0007,0.9626,0.8357,0.8986,True
+11121,4,"hey, when will the rider pick up my order thank you","hey, when will the rider pick up my order thank you",delivery_delay,order_status,0.1289,0.0664,0.8509,0.8915,0.7736,True
+28940,3,"HI TEAM, ORDER ABHI TAK NAHI AAYA, BAHUT DER HO GAYI PLEASE?","hi team, order abhi tak nahi aaya, bahut der ho gayi please?",payment_failed,delivery_delay,0.0169,0.0283,0.8959,0.8668,0.8587,True
+21144,0,"I usually order from you evefy weekend. excuse me, delivery late, I am really hungry.","i usually order from you evefy weekend. excuse me, delivery late, i am really hungry.",cancel_order,delivery_delay,0.0119,0.0273,0.8691,0.8094,0.8197,True
+24571,0,"hi quickcart, I want it sent to my friend's place instead pls","hi quickcart, i want it sent to my friend's place instead pls",account_help,change_address,0.0221,0.0441,0.9535,0.9072,0.8972,True
+5631,4,"Hey, please cancel order QC-3703210 pls!!","hey, please cancel order qc-3703210 pls!!",delivery_delay,cancel_order,0.0217,0.0186,0.9531,0.9203,0.9166,True
+11860,0,"hi team, the packet had no mayo please help.","hi team, the packet had no mayo please help.",refund_request,missing_item,0.0029,0.0108,0.9818,0.91,0.939,True
+25859,0,is my order packed?,is my order packed?,delivery_delay,order_status,0.005,0.0269,0.9941,0.9468,0.9545,True
+6827,3,"Namaste, this is the third time my order is late kindly check.","namaste, this is the third time my order is late kindly check.",order_status,delivery_delay,0.0302,0.011,0.8609,0.8267,0.8232,True
+21455,4,show me live tracking for order 45878.,show me live tracking for order 45878.,refund_request,order_status,0.0022,0.0003,0.9464,0.9613,0.9526,True
+4565,3,"good evening, I ordered by mistake, cancel it thankkkk u?","good evening, i ordered by mistake, cancel it thankkkk u?",delivery_delay,cancel_order,0.0467,0.0092,0.8907,0.8489,0.8419,True
+5804,0,"Namaste, still no refund after 7 days urgent...","namaste, still no refund after 7 days urgent...",wrong_item,refund_request,0.0225,0.007,0.9145,0.9186,0.9018,True
+17208,1,"hello, you forgot to include the dessert help me.","hello, you forgot to include the dessert help me.",wrong_item,missing_item,0.0286,0.002,0.9194,0.9853,0.937,True
+16870,3,WHAT IS MY GJFT CARD BALANE?,what is my gjft card balane?,talk_to_agent,out_of_scope,0.0142,0.0579,0.8467,0.881,0.8278,True
+20668,2,"hello, how far is the delivery partner thank you?","hello, how far is the delivery partner thank you?",delivery_delay,order_status,0.0869,0.1233,0.8581,0.803,0.7255,True
+21302,0,"excuse me, still waiting for my groceries since morning please.","excuse me, still waiting for my groceries since morning please.",cancel_order,delivery_delay,0.016,0.0577,0.9542,0.8508,0.8657,True
+24167,4,"Hi, refund status for order 440442...","hi, refund status for order 440442...",wrong_item,refund_request,0.0008,0.0098,0.9812,0.8482,0.9094,True
+23351,1,"hi quickcart, OTP not coming for payment asap","hi quickcart, otp not coming for payment asap",promo_code_issue,payment_failed,0.0043,0.0277,0.9686,0.9191,0.9279,True
+9542,3,"Hey, is my food on the way please help.","hey, is my food on the way please help.",account_help,order_status,0.0007,0.0003,0.8621,0.9296,0.8954,True
+11657,4,"Good evening, you are late and the rider isn't picking up my calls help me!!","good evening, you are late and the rider isn't picking up my calls help me!!",cancel_order,delivery_delay,0.0145,0.0226,0.9295,0.9438,0.9181,True
+727,3,"Hey, is the restaurant preparing my food asap.","hey, is the restaurant preparing my food asap.",delivery_delay,order_status,0.0271,0.0457,0.9636,0.9266,0.9087,True
+11756,3,"hi quickcart, half my groceries are missing urgent?","hi quickcart, half my groceries are missing urgent?",refund_request,missing_item,0.0039,0.0266,0.9328,0.8258,0.864,True
+6846,4,is the fod halzl,is the fod halzl,talk_to_agent,out_of_scope,0.0078,0.0082,0.8221,0.8366,0.8213,True

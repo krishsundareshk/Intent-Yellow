@@ -1,0 +1,9 @@
+slice,support,macro_f1,top1_accuracy,note
+hinglish,524,0.8681,0.8664,Evaluated over 12 active classes in slice
+multi_request,547,0.719,0.7367,Evaluated over 12 active classes in slice
+change_of_mind,141,0.9119,0.9078,Evaluated over 11 active classes in slice
+short_under_4_tokens,65,0.738,0.8462,Evaluated over 10 active classes in slice
+long_over_40_tokens,0,,,0 rows in dev exceed 40 tokens (max dev word count is 37)
+long_25_or_more_tokens,194,0.7777,0.7784,Evaluated over 12 active classes in slice
+emoji,101,0.8002,0.8812,Evaluated over 12 active classes in slice
+out_of_scope_true_silver,378,0.0777,0.873,Evaluated over 12 active classes in slice

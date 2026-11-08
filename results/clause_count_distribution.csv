@@ -1,0 +1,5 @@
+split,total_rows,total_flagged_clause_path,flagged_pct,clauses_in_message,message_count,share_of_flagged_pct,route_breakdown
+train,30000,2769,9.23,2,2764,99.82,"{""change_of_mind"": 1294, ""but_first"": 439, ""additive"": 1031, ""change_of_mind_additive"": 5}"
+train,30000,2769,9.23,3,5,0.18,"{""change_of_mind"": 1294, ""but_first"": 439, ""additive"": 1031, ""change_of_mind_additive"": 5}"
+dev,4000,396,9.9,2,396,100.0,"{""but_first"": 68, ""additive"": 164, ""change_of_mind"": 164}"
+test,3000,263,8.77,2,263,100.0,"{""additive"": 106, ""change_of_mind"": 121, ""but_first"": 36}"

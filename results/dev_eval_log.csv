@@ -1,0 +1,20 @@
+eval_id,candidate,timestamp,dev_macro_f1,dev_top1_acc,notes
+1,step2_system_v1_1_baseline_audit,2026-11-08T21:46:46,0.8485,0.8538,Step 2 error analysis of current v1.1 on full silver dev
+2,step7_system_A,2026-11-08T16:59:49Z,0.8651,0.8708,"A: Lexical only (best from Step 6) (mean over seeds 42,43,44)"
+3,step7_system_B,2026-11-08T16:59:52Z,0.8841,0.8882,"B: Lexical + clause path (mean over seeds 42,43,44)"
+4,step7_system_C,2026-11-08T16:59:56Z,0.7946,0.8104,"C: Raw 30k MLP (mean over seeds 42,43,44)"
+5,step7_system_D,2026-11-08T17:00:01Z,0.8205,0.8334,"D: Raw MLP + clause path (mean over seeds 42,43,44)"
+6,step7_system_E,2026-11-08T17:00:05Z,0.8835,0.8874,"E: Fused (lexical + MLP, alpha=0.85) + clause path (mean over seeds 42,43,44)"
+7,step7_system_F,2026-11-08T17:00:10Z,0.8736,0.8775,"F: E trained with old SCD partition (mean over seeds 42,43,44)"
+8,step7_system_G,2026-11-08T17:00:15Z,0.8842,0.8878,"G: E trained with OOF noise filter (downweight 0.25) (mean over seeds 42,43,44)"
+9,step7_system_H,2026-11-08T17:00:20Z,0.8844,0.8882,"H: Lexical (OOF noise filter) + clause path (mean over seeds 42,43,44)"
+10,step10_final_chosen_system_H,2026-11-08T17:04:13Z,0.8844,0.8882,Final submission run (System H: Lexical NF + Surgical Clause Path)
+11,step10_final_chosen_system_H,2026-11-08T17:06:11Z,0.8893,0.892,Final submission run (System H: Lexical NF + Surgical Clause Path)
+12,step7_system_A,2026-11-08T17:10:29Z,0.8651,0.8708,"A: Lexical only (best from Step 6) (mean over seeds 42,43,44)"
+13,step7_system_B,2026-11-08T17:10:31Z,0.8889,0.892,"B: Lexical + clause path (mean over seeds 42,43,44)"
+14,step7_system_C,2026-11-08T17:10:37Z,0.7946,0.8104,"C: Raw 30k MLP (mean over seeds 42,43,44)"
+15,step7_system_D,2026-11-08T17:10:42Z,0.8259,0.8382,"D: Raw MLP + clause path (mean over seeds 42,43,44)"
+16,step7_system_E,2026-11-08T17:10:47Z,0.8882,0.8911,"E: Fused (lexical + MLP, alpha=0.85) + clause path (mean over seeds 42,43,44)"
+17,step7_system_F,2026-11-08T17:10:52Z,0.8783,0.8815,"F: E trained with old SCD partition (mean over seeds 42,43,44)"
+18,step7_system_G,2026-11-08T17:10:57Z,0.8887,0.8913,"G: E trained with OOF noise filter (downweight 0.25) (mean over seeds 42,43,44)"
+19,step7_system_H,2026-11-08T17:11:02Z,0.8893,0.892,"H: Lexical (OOF noise filter) + clause path (mean over seeds 42,43,44)"

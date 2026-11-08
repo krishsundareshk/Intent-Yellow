@@ -1,0 +1,101 @@
+row_idx,utterance,extracted_clause,silver_intent,oof_full_pred,is_flagged_noisy
+24844,"agent se cnonect karo, also card declined at checkout",agent se cnonect karo,payment_failed,payment_failed,False
+12881,"tracking link not showing, where is my order plus account suspended, why","tracking link not showing, where is my order",order_status,order_status,False
+28697,has the rider ben assigned yet thanks. soryr for the long message. my neighbour also uses this app.,has the rider ben assigned yet thanks. soryr for the long message. my neighbour,order_status,order_status,False
+709,"pls connsct me to a human, also cancel the pending order",pls connsct me to a human,cancel_order,cancel_order,False
+3491,"I want human hdlp not automated replies, also the estimated time changed twice alreaddy",i want human hdlp not automated replies,delivery_delay,delivery_delay,False
+8533,two items from #80446 are missing plus payment fail ho raha hai,two items from #80446 are missing,missing_item,missing_item,False
+15746,"agent please, also is the restaurant preparing my food!!",agent please,order_status,order_status,False
+10798,"agent se connect karo, also the order I received belongs to another customer",agent se connect karo,wrong_item,wrong_item,False
+29028,"I don't want a bot, give me a person, also you gave me the wrong flavour!!","i don't want a bot, give me a person",wrong_item,wrong_item,False
+24074,the weather is terrible here today. my brother told me to try your app. what is the current status of my delivery. my neighbour also uses this app.,the weather is terrible here today. my brother told me to try your app. what is the current status of my delivery. my neighbour,order_status,order_status,False
+21311,I usually order from you everry weekend. we have guests coming over in the evening. initiate a refund for my oeder. my wifi is also acting up.,i usually order from you everry weekend. we have guests coming over in the evening. initiate a refund for my oeder. my wifi is,refund_request,refund_request,False
+15625,"HELLO, HAS MY ORDER LEFT THE RESTAURANT YTE. MY NEIGHBOUR ALSO USES THIS APP.","hello, has my order left the restaurant yte. my neighbour",order_status,order_status,False
+6896,"representative please, also i ordered ice cream but received something else",representative please,change_address,wrong_item,False
+26746,still no refund after 7 days and also i'd like to speak with a supervisor,still no refund after 7 days,payment_failed,refund_request,False
+17608,I tried calling earlier but the line was busy. my kid is crying in the background. this is the third time my order is late. my neighbour also uses this app.,i tried calling earlier but the line was busy. my kid is crying in the background. this is the third time my order is late. my neighbour,delivery_delay,delivery_delay,False
+5069,is my order packed plus i want a refund?,is my order packed,order_status,order_status,False
+1131,"my neighbour also uses this app. I usually order from u every weekend. hi team, the fries is missing pls?",my neighbour,missing_item,missing_item,False
+7598,canecl my order before it is prepared plus i assked for veg and got non-veg.,canecl my order before it is prepared,cancel_order,cancel_order,False
+19620,I wanted dal but got a different one and also i can't log in,i wanted dal but got a different one,wrong_item,wrong_item,False
+11182,"hi quickccart, reund kab milega please. my wiif is also acting up.","hi quickccart, reund kab milega please. my wiif is",refund_request,refund_request,False
+28103,my neighbour also uses this app. I want to cancel before the rider picks it up urgent,my neighbour,cancel_order,cancel_order,False
+11814,"waiting for ages, where is the delivery and also wrong samosa delivered","waiting for ages, where is the delivery",delivery_delay,delivery_delay,False
+28957,the drink was not in the bag and also promo code error at checkout,the drink was not in the bag,missing_item,missing_item,False
+26753,paisa wapas chahiye and also agent please,paisa wapas chahiye,refund_request,refund_request,False
+18522,i tried calling earlier but the line was busy. my wifi is also acting up. is my order packed. i was stuck in a meeting till 5 pm.,i tried calling earlier but the line was busy. my wifi is,order_status,order_status,False
+22102,"can a real agent help me, but first i ordered 3 things but only got 2?",i ordered 3 things but only got 2,missing_item,missing_item,False
+25528,"agdnt pleasee, but first wheen will I get my refund",wheen will i get my refund,refund_request,refund_request,False
+24649,"someone from your team should call me, but before that what's hapening with my order qc-981164",what's hapening with my order qc-981164,order_status,order_status,False
+11397,"connect me to an agent, but first order status please",order status please,order_status,order_status,False
+4533,"I don't wqnt a bot, gve me a peron, but first cancel the grocery order I just placed",cancel the grocery order i just placed,cancel_order,cancel_order,False
+6888,"pls connect me to a human, but first milk not in the package",milk not in the package,account_help,missing_item,True
+26619,"I'd like to speak with a supervisor, but before that initiate a refund for my order",initiate a refund for my order,refund_request,refund_request,False
+6288,"put me through to a human agent, but before that forgot to send my mayo",forgot to send my mayo,missing_item,missing_item,False
+28714,"talk to executive, but first item received is different from what I ordered.",item received is different from what i ordered,wrong_item,wrong_item,False
+11658,"transfer me to support, but first odrer delivered without the extra cheese I paid for",odrer delivered without the extra cheese i paid for,missing_item,missing_item,False
+22462,"I want to escalate this to a person, but first net banking payment unsuccessful",net banking payment unsuccessful,payment_failed,payment_failed,False
+16074,"I don't want a bot, give me a person, but before that the delivery time keeps increasing",the delivery time keeps increasing,delivery_delay,delivery_delay,False
+3041,"agent se connect karo, but before that is it possible to cancel my order.",is it possible to cancel my order,cancel_order,cancel_order,False
+6819,"get me a real person, but before that slow delivery today",slow delivery today,delivery_delay,delivery_delay,False
+28766,"can a real agent help me, but before that which stae is my order at",which stae is my order at,order_status,order_status,False
+28299,"let me chat with a live agent, but first is the restaurant preparing my food",is the restaurant preparing my food,order_status,order_status,False
+19520,"let me speak to customer care, but before that order not confirmed after payment",order not confirmed after payment,payment_failed,payment_failed,False
+8499,"custommer cae number do, but before that missing ites again!",missing ites again,wrong_item,missing_item,False
+26381,"escalate to your senior team, but first is my order packed",is my order packed,order_status,order_status,False
+7954,"call me back from customer support, but before that swapped items in my order",swapped items in my order,refund_request,wrong_item,False
+1454,"i want to escalate this to a person, but first cancel my order before it is prepared.",cancel my order before it is prepared,cancel_order,cancel_order,False
+11058,"agent se connect karo, but before that it has been over an hour and nothing has arrived",it has been over an hour and nothing has arrived,delivery_delay,delivery_delay,False
+13797,"someone from your team should call me, but first tried paying three tiems, nothinng works","tried paying three tiems, nothinng works",payment_failed,payment_failed,False
+216,"agent please, but before that payment didn't go through for #6548603",payment didn't go through for #6548603,payment_failed,payment_failed,False
+5996,"I'd like to speak with a supervisor, but before that need to edit my delivery location",need to edit my delivery location,change_address,change_address,False
+28571,"slow delivery today no wait, forget that, where's my food",where's my food,order_status,delivery_delay,False
+14052,"delivered the wrogn size actually forget it, I waant to escalate this to a person","forget it, i waant to escalate this to a person",refund_request,talk_to_agent,False
+10543,"not everything I ordered arrived no wait, forget that, which stage is my order at",which stage is my order at,order_status,order_status,False
+23832,"charged twice, please refund one payment actually never mind, checkout keeps failing",checkout keeps failing,payment_failed,refund_request,False
+25878,"short of one item, please check scratch that, let me chat with a live agent",let me chat with a live agent,talk_to_agent,talk_to_agent,False
+27591,I just moved to this area last month. I tried calling earlier but the line was busy. get me someone who can actually help. btw the app looks good after the update.,help. btw the app looks good after the update,refund_request,talk_to_agent,False
+17114,"discount missing from the bill no wait, forget that, change the address on my account",change the address on my account,change_address,change_address,False
+8484,"customer care number do scratch that, track my order",track my order,order_status,order_status,False
+29870,"connect me to an agent actually never mind, food is going to be cold by the time it arrives",food is going to be cold by the time it arrives,delivery_delay,delivery_delay,False
+23764,"I ordered noodles but received something else no wait, forget that, I ordered by mistake, cancel it","i ordered by mistake, cancel it",cancel_order,wrong_item,False
+17573,"can I speak to a manager actually forget it, part of my order didn't come","forget it, part of my order didn't come",missing_item,missing_item,False
+29928,bruh I got a largge instead of a medium lol,of a medium lol,wrong_item,wrong_item,False
+2311,"cancel kar do order actually never mind, delay in delivery of 8782?",delay in delivery of 8782,delivery_delay,delivery_delay,False
+4759,"customer srevice please no wait, forget that, why is my delivery taking so long",why is my delivery taking so long,delivery_delay,delivery_delay,False
+9473,"get me someone who can actually help, also the fod was inedible, i want a refuhd.","help, also the fod was inedible, i want a refuhd",refund_request,refund_request,False
+23503,"coupon says minimum order not met but i met it scratch that, any news on my order",any news on my order,delivery_delay,order_status,False
+917,Hello there. I got milk instead of curd urgent!!,of curd urgent,wrong_item,wrong_item,False
+13710,"update my nme on the account no wait, forget that, my app says confirmed, what does that mean for delivery","my app says confirmed, what does that mean for delivery",order_status,order_status,False
+20944,"CHANGE THE DROP LOCATIOON SCRATCH THAT, UPI PAYMENT STUCK ON PROCESSING.",upi payment stuck on processing,payment_failed,payment_failed,False
+15681,"i'm at the other gate, change the drop point no wait, forget that, missing items again!",missing items again,refund_request,change_address,False
+9264,"debit card keeps getting rejected on your app actually never mind, is it possible to cancel my order",is it possible to cancel my order,cancel_order,cancel_order,False
+6974,"I'm at the other gate, change the drop point actually nefer mind, my food is late, do something","nefer mind, my food is late, do something",delivery_delay,change_address,False
+7947,"hi quickcart, I got a large instead of a medium pls hlp",of a medium pls hlp,missing_item,wrong_item,True
+14621,"is my food on the way actually never mind, still waiting for my groceries sice morrning",still waiting for my groceries sice morrning,delivery_delay,delivery_delay,False
+15438,"hi, I got milk instead of curd",of curd,wrong_item,wrong_item,False
+23256,"hi team, my order is very lateeee pls. i tried calling earlier but the line was busyy.","hi team, my order is very lateeee pls. i tried calling earlier",delivery_delay,delivery_delay,False
+20255,"namaste, I wated mayo but got a different one thhank you. my brother told me to try your app.","namaste, i wated mayo",wrong_item,wrong_item,False
+1091,"excuse me, can you deliver to a difderent adrdess asap. I tried calling earlier but the line was busy. it's my mom's birthdday today.","excuse me, can you deliver to a difderent adrdess asap. i tried calling earlier",change_address,change_address,False
+26799,"hi quickcart, I ordered biryani but received something else thanks","hi quickcart, i ordered biryani",missing_item,wrong_item,False
+14956,I ordered eggs but received something else help me.,i ordered eggs,wrong_item,wrong_item,False
+7866,"I was charged but never got my food, refund me pls.",i was charged,refund_request,refund_request,False
+17837,"ezcuse me, paias kat gaya par order nahi hua","ezcuse me, paias kat gaya",payment_failed,payment_failed,False
+21063,"discount not reflecting in the final amuont atually forget it, money got deducted but the order was not placed...","discount not reflecting in the final amuont atually forget it, money got deducted",payment_failed,promo_code_issue,False
+7895,"hye, applied voucher but no disount pease help","hye, applied voucher",promo_code_issue,promo_code_issue,False
+7180,"custpmer cae number do, but befoee that i can't pay for my order",custpmer cae number do,payment_failed,payment_failed,False
+551,"I tried calling earlier but the line was busy. namaste, how do I change my address in the app asap",i tried calling earlier,change_address,change_address,False
+14881,"hi, received my order but without the garlic bread urgent. my broher told me to try ur app.","hi, received my order",missing_item,missing_item,False
+10502,"I was charged but nevrr got my food, refund me asap",i was charged,refund_request,refund_request,False
+13472,my friend recommended your service. i usually orddr from you every weeked. order status please. i tried calling earlier but the line was busy.,my friend recommended your service. i usually orddr from you every weeked. order status please. i tried calling earlier,order_status,order_status,False
+1717,"money got deducted but the order was not placed ignore what I just said, I want to cancel my order",money got deducted,cancel_order,payment_failed,False
+5988,"namaste, received my order but without the sprite thanks. i am at work right now and cannot talk mucch. my friend recommended your service.","namaste, received my order",missing_item,missing_item,False
+13953,"hi quickcart, delivered but my chocolate shake is absent","hi quickcart, delivered",missing_item,missing_item,False
+17547,"Hey, money got deducted but the order was not placed please.","hey, money got deducted",payment_failed,payment_failed,False
+9234,"excuse me, you are late and the rider isn't picking up my calls asap. I tried calling earlier but the line was busy.","excuse me, you are late and the rider isn't picking up my calls asap. i tried calling earlier",delivery_delay,delivery_delay,False
+27884,"I tried calling earlier but the line was busy. I have been a loyal cust for three years. hey, my transaction is stuck",i tried calling earlier,payment_failed,payment_failed,False
+10758,I trisd callign earlier but the line was busy. hello there. stop my order asap.,i trisd callign earlier,cancel_order,cancel_order,False
+1765,"i trked calling earlier but the line was busy. hi quickcart, it has been oevr an hour and nothing has arrived hellp me",i trked calling earlier,delivery_delay,delivery_delay,False
+13438,"namaste, payment failed but my bank shows a debit please. I tried calling earlier but the line was busy.","namaste, payment failed",payment_failed,payment_failed,False
+22810,"namaste, received my order but without the saosa thanka. my wifi is alsso acting up.","namaste, received my order",missing_item,missing_item,False
+22899,I ordsred 3 things but only got 2,i ordsred 3 things,missing_item,missing_item,False

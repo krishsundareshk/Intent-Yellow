@@ -1,0 +1,5 @@
+system,path,n_warmup,n_calls,threads,precision,batched_clauses_in_single_call,p50_ms,p95_ms,p99_ms,mean_ms
+Lexical + Clause Router (System B/H),single_path,100,1000,4,FP32,True,2.339,2.548,2.678,2.356
+Lexical + Clause Router (System B/H),clause_path,100,1000,4,FP32,True,2.502,2.695,2.774,2.514
+Fused Dual-Head + Clause (System E/G),single_path,100,1000,4,FP32,True,7.927,9.929,10.81,8.043
+Fused Dual-Head + Clause (System E/G),clause_path,100,1000,4,FP32,True,12.955,14.361,15.318,12.791

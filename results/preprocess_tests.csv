@@ -1,0 +1,11 @@
+test_case,raw_input_preview,input_char_len,normalized_output_preview,output_char_len,guard_triggered,returned_label_if_guarded,status
+emoji_only,😀😀🙏😡,4,,0,True,out_of_scope,PASS
+emoji_plus_punct,😡 ??? ...,9,??? ...,7,True,out_of_scope,PASS
+emoji_plus_request,"😡 transaction failed, what do i do 😡😡",37,"transaction failed, what do i do",32,False,PASS_TO_MODEL,PASS
+hinglish_with_emoji,🙏 order kahan hai mera 😭 pls batao,34,order kahan hai mera pls batao,30,False,PASS_TO_MODEL,PASS
+empty_string,"   	
+  ",7,,0,True,out_of_scope,PASS
+very_long_input,hello team hello team hello team hello team hello team hello team hello team hel...,569,hello team hello team hello team hello team hello team hello team hello team hel...,567,False,PASS_TO_MODEL,PASS
+split_impact_train,n=30000,15040,changed_vs_old_norm=676,0,False,non_alnum_guarded=0,INFO
+split_impact_dev,n=4000,2001,changed_vs_old_norm=101,0,True,non_alnum_guarded=1,INFO
+split_impact_test,n=3000,1518,changed_vs_old_norm=65,1,True,non_alnum_guarded=3,INFO

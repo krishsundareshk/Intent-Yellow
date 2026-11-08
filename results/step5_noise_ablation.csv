@@ -1,0 +1,5 @@
+variant,lex_oof_imp_f1,mlp_oof_imp_f1_s42,mlp_oof_imp_f1_s43,mlp_oof_imp_f1_s44,mlp_oof_imp_f1_mean,mlp_oof_imp_f1_std,fused_oof_imp_f1_s42,fused_oof_imp_f1_s43,fused_oof_imp_f1_s44,fused_oof_imp_f1_mean,fused_oof_imp_f1_std,fused_oof_unw_f1_mean,fused_oof_clean_ref_imp_f1_mean
+a_kept,0.7834,0.7227,0.7224,0.7221,0.7224,0.0002,0.7708,0.7704,0.7704,0.7705,0.0002,0.7921,0.8225
+b_removed,0.7844,0.7268,0.7273,0.7278,0.7273,0.0004,0.7709,0.7718,0.7718,0.7715,0.0004,0.7933,0.8235
+c_downweight_025,0.7844,0.7264,0.7275,0.7268,0.7269,0.0005,0.7722,0.772,0.7721,0.7721,0.0001,0.7937,0.8241
+d_relabelled,0.7847,0.7279,0.7288,0.7269,0.7279,0.0008,0.7708,0.7722,0.7721,0.7717,0.0007,0.7935,0.8237

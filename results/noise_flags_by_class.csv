@@ -1,0 +1,13 @@
+intent,train_support,raw_flagged,raw_flagged_pct,cap_15pct,capped_flagged,capped_flagged_pct
+order_status,4383,126,2.87,657,126,2.87
+delivery_delay,4385,253,5.77,657,253,5.77
+cancel_order,3265,167,5.11,489,167,5.11
+refund_request,3698,219,5.92,554,219,5.92
+missing_item,2278,98,4.3,341,98,4.3
+wrong_item,1730,125,7.23,259,125,7.23
+payment_failed,2547,88,3.46,382,88,3.46
+promo_code_issue,325,91,28.0,48,48,14.77
+change_address,1862,53,2.85,279,53,2.85
+account_help,388,109,28.09,58,58,14.95
+talk_to_agent,2128,158,7.42,319,158,7.42
+out_of_scope,3011,33,1.1,451,33,1.1
