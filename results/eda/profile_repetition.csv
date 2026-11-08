@@ -1,0 +1,4 @@
+split,total_rows,exact_duplicate_rate,normalized_duplicate_rate,top_bigrams,top_trigrams
+train,30000,0.0,0.0,"my order (3326); hi quickcart, (1796); hello there. (1732); hi team, (1729); good evening, (1709)",this is the (692); i am at (628); i want to (599); me to try (572); btw the app (526)
+dev,4000,0.0,0.0,"my order (423); hi quickcart, (251); excuse me, (235); good evening, (228); hello there. (210)",i want to (106); i am at (88); btw the app (81); this is the (79); how do i (78)
+test,3000,0.0,0.0,"my order (313); hello there. (186); excuse me, (181); hi team, (176); hi quickcart, (175)",this is the (80); i want to (68); how do i (67); is the worst (62); the worst day (62)

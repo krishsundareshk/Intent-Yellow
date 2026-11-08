@@ -1,8 +1,8 @@
 {
   "n_dev": 4000,
   "top1_accuracy": 0.4233,
-  "top3_accuracy": 0.7192,
-  "mrr": 0.6652,
+  "top3_accuracy": 0.72,
+  "mrr": 0.6655,
   "macro_f1": 0.446,
   "per_class": {
     "order_status": {

@@ -1,0 +1,13 @@
+intent,top_distinctive_ngrams
+order_status,"order, my, my order, is, the, is my, status, on, me, hi"
+delivery_delay,"delivery, late, is, the, my, order, it, time, hi, and"
+cancel_order,"cancel, order, my, to cancel, my order, cancel my, the, please, it, to"
+refund_request,"refund, for, my, refund for, order, the, please, for the, money, me"
+missing_item,"the, missing, my, in, item, not, bag, order, is, items"
+wrong_item,"wrong, the, the wrong, got, delivered, order, item, me, is, ordered"
+payment_failed,"payment, failed, checkout, for, payment failed, error, but, hi, my, card"
+promo_code_issue,"not, code, coupon, my, the, payment, applied, promo, but, order"
+change_address,"address, change, my, the, to, location, my address, wrong, to my, update"
+account_help,"address, my, account, to, the, how, change, do, how do, hi"
+talk_to_agent,"to, me, agent, speak, please, help, support, human, person, want"
+out_of_scope,"my, is, hi, the, me, hello, how, good, help, you"

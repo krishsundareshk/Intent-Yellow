@@ -1,0 +1,93 @@
+intent,taxonomy_example,verbatim_in_train,verbatim_in_dev,train_label_agreement
+order_status,"my app says confirmed, what does that mean for delivery",False,False,
+order_status,"I placed an order 20 minutes ago, any update?",False,True,
+order_status,has my order left the restaurant yet,False,False,
+order_status,track my order,True,False,1.0
+order_status,where's my food,True,False,0.0
+order_status,order status please,False,False,
+order_status,"tracking link not showing, where is my order",True,False,1.0
+order_status,order kahan hai mera,True,False,1.0
+order_status,what is the current status of my delivery,True,False,0.0
+order_status,has the rider been assigned yet,True,False,1.0
+order_status,is my food on the way,False,False,
+order_status,when will the rider pick up my order,False,True,
+order_status,can I get an eta for my order,True,False,1.0
+delivery_delay,you are late and the rider isn't picking up my calls,True,False,1.0
+delivery_delay,"you promised 30 minutes, it's been 75",False,True,
+delivery_delay,why is it delayed so much,True,False,1.0
+delivery_delay,rider has been stuck at the same place for 20 minutes,False,True,
+delivery_delay,"delivery late, I am really hungry",True,False,1.0
+delivery_delay,"cancel my food order, taking too long",False,False,
+delivery_delay,the delivery time keeps increasing,True,False,1.0
+delivery_delay,where's my food,True,False,0.0
+delivery_delay,eta was 7 pm and it's 8 now,False,False,
+delivery_delay,the order was supposed to be here already,True,False,0.0
+cancel_order,cancel my order before it is prepared,False,True,
+cancel_order,cancel it please,True,False,1.0
+cancel_order,cancel the order I made 5 minutes ago,True,False,0.0
+cancel_order,"I accidentally ordered, please cancel",True,False,1.0
+cancel_order,I'd like to cancel this order and reorder,False,True,
+cancel_order,cancel the grocery order I just placed,False,True,
+cancel_order,I want to cancel my order,True,False,1.0
+cancel_order,"can you cancel the order, I changed my mind",False,False,
+refund_request,refund the amount for the late order,True,False,1.0
+refund_request,can I get a refund for the damaged groceries,True,False,1.0
+refund_request,refund credited? I don't see it,False,False,
+refund_request,my refund is stuck,False,False,
+refund_request,"the food was inedible, I want a refund",False,False,
+refund_request,please process my refund,True,False,1.0
+refund_request,I want compensation and a refund for this order,True,False,1.0
+refund_request,initiate a refund for my order,False,True,
+refund_request,"order was delivered cold, refund please",True,False,1.0
+missing_item,I did not receive my fries,True,False,1.0
+missing_item,half my groceries are missing,True,False,0.0
+missing_item,my order is incomplete,True,False,1.0
+missing_item,"the delivery had only the main course, no sides",True,False,1.0
+missing_item,I ordered 3 things but only got 2,True,False,1.0
+missing_item,bag mein ek item nahi hai,False,False,
+missing_item,the bag was missing the sauce packets,False,False,
+wrong_item,"this is the wrong order, please fix it",False,False,
+wrong_item,I asked for veg and got non-veg,False,True,
+wrong_item,someone else's food came to me,False,True,
+wrong_item,my order is incomplete,True,False,0.0
+wrong_item,I received the wrong item,True,False,1.0
+wrong_item,they delivered the wrong dish,True,False,1.0
+wrong_item,the order I received belongs to another customer,True,False,1.0
+wrong_item,an item is missing from my order,True,False,0.0
+payment_failed,"charged twice, please refund one payment",True,False,0.0
+payment_failed,upi payment stuck on processing,False,True,
+payment_failed,money got deducted but the order was not placed,False,True,
+payment_failed,paisa kat gaya par order nahi hua,True,False,1.0
+payment_failed,payment gateway error,True,False,1.0
+payment_failed,card declined at checkout,False,False,
+payment_failed,I paid but it shows unpaid,False,True,
+payment_failed,"transaction failed, what do I do",False,True,
+change_address,change the address on my account,False,False,
+change_address,address change please,True,False,1.0
+change_address,need to edit my delivery location,False,False,
+change_address,"address galat dal diya, change karo",True,False,1.0
+change_address,please redirect my order to another address,False,True,
+change_address,can you deliver to a different address,True,False,1.0
+change_address,I want it sent to my friend's place instead,True,False,1.0
+talk_to_agent,talk to executive,False,False,
+talk_to_agent,I'd like to speak with a supervisor,True,False,1.0
+talk_to_agent,customer care number do,False,False,
+talk_to_agent,I want to escalate this to a person,True,False,1.0
+talk_to_agent,customer service please,False,False,
+talk_to_agent,someone from your team should call me,False,False,
+talk_to_agent,put me through to a human agent,True,False,1.0
+talk_to_agent,insaan se baat karni hai,False,False,
+out_of_scope,translate hello to french,False,True,
+out_of_scope,where can I buy a laptop,False,False,
+out_of_scope,how do I book a flight,False,True,
+out_of_scope,what are the best restaurants in the city,False,False,
+out_of_scope,my car won't start,False,True,
+out_of_scope,what is the capital of France,True,False,1.0
+out_of_scope,I want to book a hotel,True,False,1.0
+out_of_scope,thanks,True,False,1.0
+out_of_scope,who is the prime minister,True,False,1.0
+out_of_scope,what is 15 times 12,False,True,
+out_of_scope,which phone should I buy,True,False,1.0
+out_of_scope,good morning,True,False,1.0
+out_of_scope,tell me a joke,False,False,
+out_of_scope,can you help me with my homework,False,False,

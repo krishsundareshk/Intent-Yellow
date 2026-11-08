@@ -1,0 +1,26 @@
+# Prompt Log: QuickCart Intent Engineering
+
+## Entry 1: Codebase Analysis and System Understanding
+- **User Request**: Read all code files, results, guidelines, and documentation in the Yellow folder, build an understanding, and write `understanding.md`.
+- **Action**: Performed directory traversal, inspected baseline matcher, taxonomy, train/dev/test datasets, and starter evaluation. Diagnosed major bugs in `baseline/eval.py` (`target_names` misalignment and false weighted F1). Documented all findings in `understanding.md`.
+- **Decisions / Adjustments**: Kept original code untouched while recording evaluation flaws.
+
+## Entry 2: Repository Connection & Version Control
+- **User Request**: Connect to `https://github.com/krishsundareshk/Intent-Yellow.git`, record in `.env`, and commit all experiments.
+- **Action**: Stored remote URL in `.env`, initialized local git repository, added `.gitignore`, configured origin with SSH authentication, created initial commit, and pushed `main` branch to GitHub.
+- **Decisions / Adjustments**: Switched from HTTPS to SSH authentication to bypass interactive password prompts.
+
+## Entry 3: Exploratory Data Analysis (EDA) Pipeline & Dashboard
+- **User Request**: Follow instructions in `AGENT_EDA_INSTRUCTIONS.md`, create `.ipynb` notebooks, and save all artifacts.
+- **Action**:
+  1. Verified environment and installed dependencies (`cleanlab`, `plotly`, `nbformat`, `rapidfuzz`, `sentence-transformers`).
+  2. Implemented Step 1 audit (`eda/step1_audit.py`): verified integrity counts, duplicates, class distribution stats, and 200-sample manual reading.
+  3. Implemented Step 2 profiling (`eda/step2_profile.py`): analyzed length, script mix (English vs. Hinglish), non-text artifacts, and long messages.
+  4. Implemented Step 3 noise quantification (`eda/step3_noise.py`): classified typos, abbreviations, emojis, Hinglish lexicon, long rambling, and multi-request cues.
+  5. Implemented Step 4 taxonomy audit (`eda/step4_taxonomy.py`): computed centroid overlap pairs, distinctive n-grams, and README rule coverage.
+  6. Implemented Step 5 clustering (`eda/step5_cluster.py`): clustered normalized train messages using `sentence-transformers/all-MiniLM-L6-v2` with k=30.
+  7. Implemented Step 6 label noise estimation (`eda/step6_label_noise.py`): fitted 5-fold cross-validated out-of-fold Logistic Regression, built 3,578-row high-risk queue, and estimated 8.0% error rate with Wilson 95% CI.
+  8. Authored decision log (`eda/decision_log.md`) and comprehensive findings (`eda/eda_findings.md`).
+  9. Built self-contained HTML dashboard (`results/eda/dashboard.html`) and verified 8 key metrics against source data (`results/eda/dashboard_checks.md`).
+  10. Generated interactive EDA notebook `notebooks/01_exploratory_data_analysis.ipynb`.
+- **Decisions / Adjustments**: Used `--system-site-packages` for local virtualenv to leverage pre-installed PyTorch and avoid building heavy wheels from source.
