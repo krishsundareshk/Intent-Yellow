@@ -24,3 +24,15 @@
   9. Built self-contained HTML dashboard (`results/eda/dashboard.html`) and verified 8 key metrics against source data (`results/eda/dashboard_checks.md`).
   10. Generated interactive EDA notebook `notebooks/01_exploratory_data_analysis.ipynb`.
 - **Decisions / Adjustments**: Used `--system-site-packages` for local virtualenv to leverage pre-installed PyTorch and avoid building heavy wheels from source.
+
+## Entry 4: Dashboard Reconstruction & Pure Empirical Noise Estimation
+- **User Request**: Remove agentic judgement on the silver label part, reconstruct the dashboard with proper visual charts and analytical interpretations rather than just raw CSV tables, clean unnecessary files, and push to GitHub under a new branch `EDA`.
+- **Action**:
+  1. Created and switched to git branch `EDA`.
+  2. Updated `eda/step6_label_noise.py` to evaluate silver label noise purely through 5-fold cross-validated out-of-fold Logistic Regression disagreement (yielding 13.79% OOF disagreement, 95% Wilson CI: [13.40%, 14.18%]) without subjective heuristic grading.
+  3. Cleaned redundant/empty CSV files (`duplicates_conflicts.csv`, `duplicates_conflict_pairs.csv`, `label_coverage.csv`, `label_noise_audit.csv`).
+  4. Updated `eda/eda_findings.md` to reflect the empirical cross-validated noise metrics.
+  5. Reconstructed `eda/build_dashboard.py` and `results/eda/dashboard.html` with interactive responsive Chart.js visual charts (Train vs. Dev class balance, OOF disagreement rates per class, noise profile scorecard by split, and semantic overlap similarities), analytical interpretation boxes for each section, and search/sort tables.
+  6. Verified consistency of metrics in `results/eda/dashboard_checks.md`.
+  7. Committed all changes and pushed branch `EDA` to origin.
+- **Decisions / Adjustments**: Replaced agent judgement annotations with statistical cross-validation metrics across all 30k rows to provide objective validation data.

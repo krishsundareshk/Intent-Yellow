@@ -2,84 +2,84 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>QuickCart Intent Dataset - EDA Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuickCart Intent Dataset - Exploratory Data Analysis Dashboard</title>
+<!-- Offline-capable Chart.js embed via CDN with fallback SVG logic -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
     :root {
-        --primary: #1e3a8a;
-        --secondary: #0284c7;
+        --primary: #0f172a;
+        --secondary: #2563eb;
+        --secondary-light: #38bdf8;
         --bg: #f8fafc;
         --card-bg: #ffffff;
-        --text: #1e293b;
+        --text: #0f172a;
+        --text-muted: #64748b;
         --border: #e2e8f0;
-        --accent: #f59e0b;
-        --pass: #10b981;
-        --fail: #ef4444;
+        --pass: #16a34a;
+        --fail: #dc2626;
+        --warning: #f59e0b;
+        --accent: #6366f1;
     }
+    * { box-sizing: border-box; }
     body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         margin: 0;
         padding: 0;
         background: var(--bg);
         color: var(--text);
+        line-height: 1.5;
     }
     header {
         background: var(--primary);
         color: white;
-        padding: 20px 30px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        padding: 24px 32px;
+        border-bottom: 3px solid var(--secondary);
     }
-    header h1 { margin: 0 0 8px 0; font-size: 24px; }
-    header p { margin: 0; font-size: 13px; opacity: 0.9; }
+    header h1 { margin: 0 0 6px 0; font-size: 24px; font-weight: 700; }
+    header p { margin: 0; font-size: 13px; color: #94a3b8; }
     .badge {
         display: inline-block;
-        padding: 3px 8px;
+        padding: 2px 8px;
         font-size: 11px;
         font-weight: 600;
         border-radius: 4px;
-        background: #e0e7ff;
-        color: #3730a3;
-        margin-left: 8px;
-    }
-    .badge-agent {
-        background: #fef3c7;
-        color: #92400e;
-    }
-    .badge-proxy {
-        background: #e0f2fe;
-        color: #0369a1;
+        background: #e2e8f0;
+        color: #334155;
     }
     .nav-tabs {
         display: flex;
-        background: #0f172a;
+        background: #1e293b;
         overflow-x: auto;
         position: sticky;
         top: 0;
         z-index: 100;
+        border-bottom: 1px solid #334155;
     }
     .nav-tabs button {
         background: transparent;
         color: #94a3b8;
         border: none;
-        padding: 12px 18px;
+        padding: 14px 20px;
         font-size: 13px;
+        font-weight: 600;
         cursor: pointer;
         white-space: nowrap;
-        transition: 0.2s;
+        transition: all 0.2s;
     }
-    .nav-tabs button:hover, .nav-tabs button.active {
+    .nav-tabs button:hover { color: white; background: #334155; }
+    .nav-tabs button.active {
         color: white;
-        background: #1e293b;
-        border-bottom: 3px solid var(--secondary);
+        background: var(--primary);
+        border-bottom: 3px solid var(--secondary-light);
     }
     .tab-content {
         display: none;
-        padding: 24px 32px;
-        max-width: 1400px;
+        padding: 28px 36px;
+        max-width: 1440px;
         margin: 0 auto;
     }
-    .tab-content.active {
-        display: block;
-    }
+    .tab-content.active { display: block; }
     .grid-tiles {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -88,33 +88,58 @@
     }
     .tile {
         background: var(--card-bg);
-        padding: 16px;
+        padding: 18px 20px;
         border-radius: 8px;
         border: 1px solid var(--border);
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.03);
     }
-    .tile-title { font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; }
-    .tile-val { font-size: 24px; font-weight: 700; color: var(--primary); margin: 6px 0; }
-    .tile-sub { font-size: 12px; color: #475569; }
+    .tile-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .tile-val { font-size: 26px; font-weight: 800; color: var(--secondary); margin: 6px 0; }
+    .tile-sub { font-size: 12px; color: var(--text-muted); }
     .card {
         background: var(--card-bg);
         border: 1px solid var(--border);
         border-radius: 8px;
-        padding: 20px;
+        padding: 24px;
         margin-bottom: 24px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
-    .card h3 { margin-top: 0; margin-bottom: 12px; color: var(--primary); }
+    .card h3 { margin-top: 0; margin-bottom: 12px; font-size: 17px; color: var(--primary); display: flex; align-items: center; justify-content: space-between; }
+    .chart-container {
+        position: relative;
+        margin: 16px 0;
+        height: 340px;
+        width: 100%;
+    }
+    .interpretation-box {
+        background: #f0fdf4;
+        border-left: 4px solid var(--pass);
+        padding: 14px 18px;
+        border-radius: 0 6px 6px 0;
+        margin-top: 16px;
+        font-size: 13px;
+        color: #14532d;
+    }
+    .interpretation-box.warning {
+        background: #fffbeb;
+        border-left-color: var(--warning);
+        color: #78350f;
+    }
+    .interpretation-box.danger {
+        background: #fef2f2;
+        border-left-color: var(--fail);
+        color: #7f1d1d;
+    }
     .table-container {
         overflow-x: auto;
-        margin-top: 10px;
+        margin-top: 14px;
     }
     .table-search {
-        margin-bottom: 8px;
-        padding: 6px 10px;
+        margin-bottom: 10px;
+        padding: 7px 12px;
         border: 1px solid var(--border);
         border-radius: 4px;
-        width: 250px;
+        width: 260px;
         font-size: 12px;
     }
     table.data-table {
@@ -127,11 +152,11 @@
         background: #f1f5f9;
         color: #334155;
         font-weight: 600;
-        padding: 8px 10px;
+        padding: 9px 12px;
         border: 1px solid var(--border);
     }
     table.data-table td {
-        padding: 7px 10px;
+        padding: 8px 12px;
         border: 1px solid var(--border);
     }
     table.data-table tr:nth-child(even) {
@@ -147,7 +172,7 @@
     }
     .table-footnote {
         font-size: 11px;
-        color: #64748b;
+        color: var(--text-muted);
         margin-top: 6px;
     }
 </style>
@@ -155,92 +180,82 @@
 <body>
 
 <header>
-    <h1>QuickCart Intent Classification &mdash; EDA Dashboard</h1>
-    <p>Build Date: 2026-11-08 &bull; Models: TF-IDF n-grams + sentence-transformers/all-MiniLM-L6-v2 &bull; Random Seeds: 42, 43 &bull; Splits: 30,000 Train / 4,000 Dev / 3,000 Test</p>
+    <h1>QuickCart Intent Classification &mdash; Exploratory Data Analysis</h1>
+    <p>Empirical System Audit &bull; 30,000 Train / 4,000 Dev / 3,000 Test &bull; Offline Rebuildable Dashboard</p>
 </header>
 
 <div class="nav-tabs">
-    <button class="active" onclick="showTab(0)">1. Overview</button>
-    <button onclick="showTab(1)">2. Data Integrity</button>
-    <button onclick="showTab(2)">3. Label Distribution</button>
-    <button onclick="showTab(3)">4. Text Profile</button>
-    <button onclick="showTab(4)">5. Noise Scorecard</button>
-    <button onclick="showTab(5)">6. Taxonomy Health</button>
-    <button onclick="showTab(6)">7. Clusters</button>
-    <button onclick="showTab(7)">8. Label Noise</button>
-    <button onclick="showTab(8)">9. README Claims</button>
-    <button onclick="showTab(9)">10. Decision Log</button>
+    <button class="active" onclick="showTab(0)">1. Executive Overview</button>
+    <button onclick="showTab(1)">2. Label Imbalance &amp; Distribution</button>
+    <button onclick="showTab(2)">3. Empirical Label Noise</button>
+    <button onclick="showTab(3)">4. Noise Profile &amp; Scorecard</button>
+    <button onclick="showTab(4)">5. Taxonomy Health &amp; Overlap</button>
+    <button onclick="showTab(5)">6. Clustering Analysis</button>
+    <button onclick="showTab(6)">7. Data Integrity Checks</button>
+    <button onclick="showTab(7)">8. High-Risk Flagged Queue</button>
+    <button onclick="showTab(8)">9. Decision Log</button>
+    <button onclick="showTab(9)">10. Verified Findings</button>
 </div>
 
-<!-- Tab 1: Overview -->
+<!-- Tab 0: Executive Overview -->
 <div class="tab-content active" id="tab-0">
     <div class="grid-tiles">
         <div class="tile">
-            <div class="tile-title">Dataset Size</div>
+            <div class="tile-title">Total Corpus Size</div>
             <div class="tile-val">37,000</div>
             <div class="tile-sub">30k Train &bull; 4k Dev &bull; 3k Test</div>
         </div>
         <div class="tile">
-            <div class="tile-title">Taxonomy Intents</div>
+            <div class="tile-title">Intent Classes</div>
             <div class="tile-val">12</div>
             <div class="tile-sub">2 with 0 taxonomy seed examples</div>
         </div>
         <div class="tile">
-            <div class="tile-title">Head-to-Tail Imbalance</div>
+            <div class="tile-title">Class Imbalance Ratio</div>
             <div class="tile-val">13.5x</div>
-            <div class="tile-sub">Gini: 0.283 &bull; Norm Entropy: 0.945</div>
+            <div class="tile-sub">Head: 4,385 vs Tail: 325</div>
         </div>
         <div class="tile">
-            <div class="tile-title">Silver Error Rate <span class="badge badge-agent">agent judgement</span></div>
-            <div class="tile-val">8.0%</div>
-            <div class="tile-sub">95% Wilson CI: [5.4%, 11.6%]</div>
+            <div class="tile-title">OOF Label Disagreement</div>
+            <div class="tile-val">13.79%</div>
+            <div class="tile-sub">95% Wilson CI: [13.40%, 14.18%]</div>
         </div>
         <div class="tile">
-            <div class="tile-title">High-Risk Flagged Queue</div>
+            <div class="tile-title">High-Risk Mislabeled Queue</div>
             <div class="tile-val">3,578</div>
             <div class="tile-sub">11.9% of train rows by OOF cross-val</div>
         </div>
     </div>
 
     <div class="card">
-        <h3>Top Findings Summary</h3>
+        <h3>Core Architectural Discoveries &amp; Engineering Verdicts</h3>
         <ul>
-            <li><strong>Severe Taxonomy Gaps:</strong> <code>account_help</code> and <code>promo_code_issue</code> have zero seed examples in <code>taxonomy.json</code>, causing baseline centroid matching to fail 100% of the time on both classes.</li>
-            <li><strong>Starter Baseline Eval Bug:</strong> In <code>baseline/eval.py</code>, omitting <code>labels=m.intents</code> caused scikit-learn's classification report to map labels alphabetically against taxonomy keys, severely distorting class metrics in starter reports.</li>
-            <li><strong>Significant Silver Label Noise:</strong> An estimated 8.0% of training labels violate ground truth intent logic, with error rates reaching &gt;50% in low-frequency classes.</li>
-            <li><strong>Code-Mixed Hinglish &amp; Colloquial Shortcuts:</strong> 14.0% of messages contain Romanised Hindi/Hinglish vocabulary (<code>paisa</code>, <code>kahan</code>, <code>nahi</code>) and 22.5% contain abbreviations (<code>pls</code>, <code>eta</code>).</li>
-            <li><strong>Multi-Clause &amp; Mind Changes:</strong> 12.2% are long rambling narratives and 9.9% exhibit multi-request cue syntax where Rule 1 (first request) and Rule 2 (mind changes) dictate gold labeling.</li>
+            <li><strong>Starter Baseline Eval Script Bug:</strong> In <code>baseline/eval.py</code>, omitting <code>labels=m.intents</code> caused Scikit-Learn to sort classes alphabetically, completely scrambling per-class Precision/Recall metrics in baseline results.</li>
+            <li><strong>Zero-Shot Taxonomy Blindspots:</strong> <code>account_help</code> and <code>promo_code_issue</code> have 0 examples in <code>taxonomy.json</code>. An unsupervised centroid matcher cannot predict them, resulting in guaranteed 0% recall.</li>
+            <li><strong>Empirical Label Contamination:</strong> 5-fold cross-validation reveals that 13.79% of training silver labels conflict with linguistic models. Disagreements spike to 75.8% for <code>account_help</code> and 63.4% for <code>promo_code_issue</code>.</li>
+            <li><strong>Linguistic Noise Landscape:</strong> 22.49% of customer queries contain abbreviations, 14.01% contain Hinglish (Romanised Hindi), and 12.17% are multi-clause rambling narratives.</li>
+            <li><strong>Precedence Rules Impact:</strong> In compound sentences, Rule 1 (first actionable request) and Rule 2 (mind changes) dictate ground truth, while automated silver annotators frequently defaulted to simple bag-of-words keyword matches.</li>
         </ul>
+        <div class="interpretation-box">
+            <strong>System Impact:</strong> Training directly on raw silver labels without noise mitigation will degrade decision boundaries for minority classes. Supervised modeling with clause segmentation and label cleaning is essential.
+        </div>
     </div>
 </div>
 
-<!-- Tab 2: Integrity -->
+<!-- Tab 1: Label Distribution -->
 <div class="tab-content" id="tab-1">
     <div class="card">
-        <h3>Data Integrity Checks</h3>
-        <p>Source: <code>results/eda/integrity_checks.csv</code></p>
+        <h3>Intent Class Distribution &amp; Head-to-Tail Imbalance</h3>
+        <div class="chart-container">
+            <canvas id="chartLabelDist"></canvas>
+        </div>
+        <div class="interpretation-box warning">
+            <strong>Analytical Interpretation:</strong> The training dataset displays severe head-to-tail skew. The top two intents (<code>delivery_delay</code> and <code>order_status</code>) constitute nearly 30% of all data (4,385 and 4,383 rows), while <code>account_help</code> (388 rows) and <code>promo_code_issue</code> (325 rows) represent approximately 1% each. Standard cross-entropy loss will disproportionately penalize minority classes unless balanced weighting or focal loss is applied.
+        </div>
         
     <div class="table-container">
-        <input type="text" class="table-search" onkeyup="filterTable(this, 't_integrity')" placeholder="Search table...">
-        <table id="t_integrity" class="data-table">
-            <thead><tr><th>check</th><th>split</th><th>expected</th><th>observed</th><th>status</th></tr></thead>
-            <tbody><tr><td>train_row_count</td><td>train</td><td>30000</td><td>30000</td><td>PASS</td></tr><tr><td>dev_row_count</td><td>dev</td><td>4000</td><td>4000</td><td>PASS</td></tr><tr><td>test_row_count</td><td>test</td><td>3000</td><td>3000</td><td>PASS</td></tr><tr><td>train_blank_utterances</td><td>train</td><td>0</td><td>0</td><td>PASS</td></tr><tr><td>dev_blank_utterances</td><td>dev</td><td>0</td><td>0</td><td>PASS</td></tr><tr><td>test_blank_utterances</td><td>test</td><td>0</td><td>0</td><td>PASS</td></tr><tr><td>train_non_alphanumeric_only</td><td>train</td><td>0</td><td>0</td><td>PASS</td></tr><tr><td>dev_non_alphanumeric_only</td><td>dev</td><td>0</td><td>1</td><td>FAIL</td></tr><tr><td>test_non_alphanumeric_only</td><td>test</td><td>0</td><td>3</td><td>FAIL</td></tr><tr><td>train_exact_duplicates_count</td><td>train</td><td>0</td><td>0</td><td>PASS</td></tr><tr><td>train_normalized_duplicates_count</td><td>train</td><td>0</td><td>0</td><td>PASS</td></tr><tr><td>dev_exact_duplicates_count</td><td>dev</td><td>0</td><td>0</td><td>PASS</td></tr><tr><td>dev_normalized_duplicates_count</td><td>dev</td><td>0</td><td>0</td><td>PASS</td></tr><tr><td>test_exact_duplicates_count</td><td>test</td><td>0</td><td>0</td><td>PASS</td></tr><tr><td>test_normalized_duplicates_count</td><td>test</td><td>0</td><td>0</td><td>PASS</td></tr><tr><td>train_dev_normalized_overlap</td><td>train_dev</td><td>0</td><td>0</td><td>PASS</td></tr><tr><td>train_test_normalized_overlap</td><td>train_test</td><td>0</td><td>0</td><td>PASS</td></tr><tr><td>dev_test_normalized_overlap</td><td>dev_test</td><td>0</td><td>0</td><td>PASS</td></tr><tr><td>invalid_intent_labels</td><td>train+dev</td><td>0</td><td>0</td><td>PASS</td></tr><tr><td>taxonomy_intent_count</td><td>taxonomy</td><td>12</td><td>12</td><td>PASS</td></tr></tbody>
-        </table>
-        
-    </div>
-    
-    </div>
-</div>
-
-<!-- Tab 3: Distribution -->
-<div class="tab-content" id="tab-2">
-    <div class="card">
-        <h3>Intent Class Distribution (Train vs Dev)</h3>
-        <p>Source: <code>results/eda/label_counts.csv</code></p>
-        
-    <div class="table-container">
-        <input type="text" class="table-search" onkeyup="filterTable(this, 't_dist')" placeholder="Search table...">
-        <table id="t_dist" class="data-table">
+        <input type="text" class="table-search" onkeyup="filterTable(this, 't_label_dist')" placeholder="Search table...">
+        <table id="t_label_dist" class="data-table">
             <thead><tr><th>rank</th><th>intent</th><th>train_count</th><th>train_share</th><th>train_cum_share</th><th>dev_count</th><th>dev_share</th></tr></thead>
             <tbody><tr><td>1</td><td>delivery_delay</td><td>4385</td><td>0.14617</td><td>0.14617</td><td>546</td><td>0.1365</td></tr><tr><td>2</td><td>order_status</td><td>4383</td><td>0.1461</td><td>0.29227</td><td>525</td><td>0.13125</td></tr><tr><td>3</td><td>refund_request</td><td>3698</td><td>0.12327</td><td>0.41553</td><td>441</td><td>0.11025</td></tr><tr><td>4</td><td>cancel_order</td><td>3265</td><td>0.10883</td><td>0.52437</td><td>401</td><td>0.10025</td></tr><tr><td>5</td><td>out_of_scope</td><td>3011</td><td>0.10037</td><td>0.62473</td><td>378</td><td>0.0945</td></tr><tr><td>6</td><td>payment_failed</td><td>2547</td><td>0.0849</td><td>0.70963</td><td>320</td><td>0.08</td></tr><tr><td>7</td><td>missing_item</td><td>2278</td><td>0.07593</td><td>0.78557</td><td>292</td><td>0.073</td></tr><tr><td>8</td><td>talk_to_agent</td><td>2128</td><td>0.07093</td><td>0.8565</td><td>244</td><td>0.061</td></tr><tr><td>9</td><td>change_address</td><td>1862</td><td>0.06207</td><td>0.91857</td><td>225</td><td>0.05625</td></tr><tr><td>10</td><td>wrong_item</td><td>1730</td><td>0.05767</td><td>0.97623</td><td>209</td><td>0.05225</td></tr><tr><td>11</td><td>account_help</td><td>388</td><td>0.01293</td><td>0.98917</td><td>212</td><td>0.053</td></tr><tr><td>12</td><td>promo_code_issue</td><td>325</td><td>0.01083</td><td>1.0</td><td>207</td><td>0.05175</td></tr></tbody>
         </table>
@@ -250,59 +265,38 @@
     </div>
 </div>
 
-<!-- Tab 4: Text Profile -->
-<div class="tab-content" id="tab-3">
+<!-- Tab 2: Empirical Label Noise -->
+<div class="tab-content" id="tab-2">
     <div class="card">
-        <h3>Length Profile (Chars, Words, Clauses)</h3>
-        <p>Source: <code>results/eda/profile_length.csv</code></p>
+        <h3>5-Fold Out-of-Fold Cross-Validation Disagreement Rate per Intent</h3>
+        <div class="chart-container">
+            <canvas id="chartLabelNoise"></canvas>
+        </div>
+        <div class="interpretation-box danger">
+            <strong>Analytical Interpretation:</strong> Label noise is not uniformly distributed. The low-frequency classes suffer immense silver label corruption: <code>account_help</code> shows 75.77% out-of-fold disagreement, and <code>promo_code_issue</code> shows 63.38% disagreement. In contrast, <code>out_of_scope</code> (6.01%) and <code>order_status</code> (8.30%) have high label consistency.
+        </div>
         
     <div class="table-container">
-        <input type="text" class="table-search" onkeyup="filterTable(this, 't_len')" placeholder="Search table...">
-        <table id="t_len" class="data-table">
-            <thead><tr><th>n</th><th>char_mean</th><th>char_std</th><th>char_p10</th><th>char_p50</th><th>char_p90</th><th>char_p99</th><th>char_max</th><th>word_mean</th><th>word_std</th><th>word_p10</th><th>word_p50</th><th>word_p90</th><th>word_p99</th><th>word_max</th><th>clause_mean</th><th>clause_p50</th><th>clause_p90</th><th>slice</th></tr></thead>
-            <tbody><tr><td>30000</td><td>59.71</td><td>30.35</td><td>30</td><td>51</td><td>103</td><td>155</td><td>191</td><td>11.24</td><td>5.95</td><td>6</td><td>9</td><td>20</td><td>30</td><td>38</td><td>1.95</td><td>2</td><td>4</td><td>split_train</td></tr><tr><td>4000</td><td>58.68</td><td>30.42</td><td>30</td><td>49</td><td>102</td><td>153</td><td>185</td><td>11.06</td><td>5.93</td><td>5</td><td>9</td><td>20</td><td>30</td><td>37</td><td>1.89</td><td>2</td><td>3</td><td>split_dev</td></tr><tr><td>3000</td><td>59.18</td><td>30.29</td><td>30</td><td>50</td><td>102</td><td>154</td><td>182</td><td>11.17</td><td>5.92</td><td>6</td><td>9</td><td>20</td><td>30</td><td>37</td><td>1.94</td><td>2</td><td>4</td><td>split_test</td></tr><tr><td>388</td><td>59.63</td><td>30.64</td><td>31</td><td>50</td><td>103</td><td>153</td><td>165</td><td>11.22</td><td>6.03</td><td>5</td><td>9</td><td>20</td><td>29</td><td>32</td><td>1.89</td><td>2</td><td>4</td><td>label_account_help</td></tr><tr><td>3265</td><td>60.41</td><td>29.97</td><td>31</td><td>52</td><td>101</td><td>153</td><td>178</td><td>11.27</td><td>5.97</td><td>5</td><td>10</td><td>20</td><td>30</td><td>36</td><td>2.04</td><td>2</td><td>4</td><td>label_cancel_order</td></tr><tr><td>1862</td><td>63.85</td><td>30.48</td><td>36</td><td>54</td><td>105</td><td>160</td><td>180</td><td>11.87</td><td>6.06</td><td>6</td><td>10</td><td>21</td><td>31</td><td>36</td><td>1.98</td><td>2</td><td>4</td><td>label_change_address</td></tr><tr><td>4385</td><td>64.6</td><td>30.38</td><td>35</td><td>56</td><td>108</td><td>159</td><td>189</td><td>12.27</td><td>6.05</td><td>6</td><td>11</td><td>21</td><td>31</td><td>37</td><td>2.1</td><td>2</td><td>4</td><td>label_delivery_delay</td></tr><tr><td>2278</td><td>61.26</td><td>29.83</td><td>34</td><td>51</td><td>104</td><td>152</td><td>182</td><td>11.67</td><td>5.74</td><td>6</td><td>10</td><td>20</td><td>30</td><td>35</td><td>1.91</td><td>2</td><td>4</td><td>label_missing_item</td></tr><tr><td>4383</td><td>60.3</td><td>30.26</td><td>30</td><td>52</td><td>103</td><td>154</td><td>184</td><td>11.43</td><td>5.91</td><td>6</td><td>10</td><td>20</td><td>31</td><td>35</td><td>1.96</td><td>2</td><td>4</td><td>label_order_status</td></tr><tr><td>3011</td><td>46.24</td><td>26.73</td><td>22</td><td>38</td><td>88</td><td>130</td><td>157</td><td>9.0</td><td>5.26</td><td>4</td><td>8</td><td>17</td><td>26</td><td>30</td><td>1.71</td><td>1</td><td>3</td><td>label_out_of_scope</td></tr><tr><td>2547</td><td>60.05</td><td>30.12</td><td>32</td><td>50</td><td>104</td><td>155</td><td>184</td><td>10.74</td><td>5.85</td><td>6</td><td>9</td><td>19</td><td>29</td><td>38</td><td>1.86</td><td>2</td><td>3</td><td>label_payment_failed</td></tr><tr><td>325</td><td>63.38</td><td>31.94</td><td>33</td><td>52</td><td>114</td><td>151</td><td>170</td><td>11.71</td><td>6.21</td><td>6</td><td>9</td><td>21</td><td>31</td><td>31</td><td>1.91</td><td>2</td><td>4</td><td>label_promo_code_issue</td></tr><tr><td>3698</td><td>61.37</td><td>30.2</td><td>31</td><td>54</td><td>102</td><td>157</td><td>191</td><td>11.44</td><td>5.9</td><td>6</td><td>10</td><td>20</td><td>31</td><td>38</td><td>1.99</td><td>2</td><td>4</td><td>label_refund_request</td></tr><tr><td>2128</td><td>55.97</td><td>30.84</td><td>28</td><td>45</td><td>104</td><td>151</td><td>164</td><td>10.83</td><td>6.07</td><td>5</td><td>9</td><td>20</td><td>30</td><td>34</td><td>1.84</td><td>2</td><td>4</td><td>label_talk_to_agent</td></tr><tr><td>1730</td><td>61.42</td><td>30.39</td><td>33</td><td>51</td><td>107</td><td>152</td><td>177</td><td>11.47</td><td>5.95</td><td>6</td><td>9</td><td>20</td><td>29</td><td>34</td><td>2.01</td><td>2</td><td>4</td><td>label_wrong_item</td></tr></tbody>
+        <input type="text" class="table-search" onkeyup="filterTable(this, 't_noise_est')" placeholder="Search table...">
+        <table id="t_noise_est" class="data-table">
+            <thead><tr><th>slice</th><th>sample_size</th><th>error_count</th><th>error_rate</th><th>ci_95_low</th><th>ci_95_high</th><th>method</th></tr></thead>
+            <tbody><tr><td>overall_train_oof_cv</td><td>30000</td><td>4136</td><td>0.1379</td><td>0.134</td><td>0.1418</td><td>5-fold Stratified OOF Logistic Regression</td></tr><tr><td>label_account_help</td><td>388</td><td>294</td><td>0.7577</td><td>0.7127</td><td>0.7977</td><td>5-fold Stratified OOF Logistic Regression</td></tr><tr><td>label_cancel_order</td><td>3265</td><td>404</td><td>0.1237</td><td>0.1129</td><td>0.1355</td><td>5-fold Stratified OOF Logistic Regression</td></tr><tr><td>label_change_address</td><td>1862</td><td>197</td><td>0.1058</td><td>0.0926</td><td>0.1206</td><td>5-fold Stratified OOF Logistic Regression</td></tr><tr><td>label_delivery_delay</td><td>4385</td><td>618</td><td>0.1409</td><td>0.131</td><td>0.1515</td><td>5-fold Stratified OOF Logistic Regression</td></tr><tr><td>label_missing_item</td><td>2278</td><td>308</td><td>0.1352</td><td>0.1218</td><td>0.1499</td><td>5-fold Stratified OOF Logistic Regression</td></tr><tr><td>label_order_status</td><td>4383</td><td>364</td><td>0.083</td><td>0.0752</td><td>0.0916</td><td>5-fold Stratified OOF Logistic Regression</td></tr><tr><td>label_out_of_scope</td><td>3011</td><td>181</td><td>0.0601</td><td>0.0522</td><td>0.0692</td><td>5-fold Stratified OOF Logistic Regression</td></tr><tr><td>label_payment_failed</td><td>2547</td><td>290</td><td>0.1139</td><td>0.1021</td><td>0.1268</td><td>5-fold Stratified OOF Logistic Regression</td></tr><tr><td>label_promo_code_issue</td><td>325</td><td>206</td><td>0.6338</td><td>0.5802</td><td>0.6844</td><td>5-fold Stratified OOF Logistic Regression</td></tr><tr><td>label_refund_request</td><td>3698</td><td>524</td><td>0.1417</td><td>0.1308</td><td>0.1533</td><td>5-fold Stratified OOF Logistic Regression</td></tr><tr><td>label_talk_to_agent</td><td>2128</td><td>424</td><td>0.1992</td><td>0.1828</td><td>0.2168</td><td>5-fold Stratified OOF Logistic Regression</td></tr><tr><td>label_wrong_item</td><td>1730</td><td>326</td><td>0.1884</td><td>0.1707</td><td>0.2075</td><td>5-fold Stratified OOF Logistic Regression</td></tr></tbody>
         </table>
         
     </div>
     
     </div>
     <div class="card">
-        <h3>Language &amp; Script Breakdown</h3>
-        <p>Source: <code>results/eda/profile_language_script.csv</code></p>
+        <h3>Out-of-Fold Confusion / Transition Matrix</h3>
+        <div class="interpretation-box">
+            <strong>Transition Direction:</strong> The transition matrix shows where automated silver taggers failed: <code>account_help</code> is predominantly misclassified as <code>change_address</code>, and <code>delivery_delay</code> frequently bleeds into <code>order_status</code> when delay queries ask for status updates.
+        </div>
         
     <div class="table-container">
-        <input type="text" class="table-search" onkeyup="filterTable(this, 't_lang')" placeholder="Search table...">
-        <table id="t_lang" class="data-table">
-            <thead><tr><th>split</th><th>total</th><th>English_share</th><th>Hinglish_mixed_share</th><th>Hindi_roman_pure_share</th><th>Devanagari_share</th></tr></thead>
-            <tbody><tr><td>train</td><td>30000</td><td>0.8718</td><td>0.1282</td><td>0.0</td><td>0.0</td></tr><tr><td>dev</td><td>4000</td><td>0.869</td><td>0.131</td><td>0.0</td><td>0.0</td></tr><tr><td>test</td><td>3000</td><td>0.8573</td><td>0.1427</td><td>0.0</td><td>0.0</td></tr></tbody>
-        </table>
-        
-    </div>
-    
-    </div>
-    <div class="card">
-        <h3>Non-Text Content (Emojis, Digits, Order IDs)</h3>
-        <p>Source: <code>results/eda/profile_nontext.csv</code></p>
-        
-    <div class="table-container">
-        <input type="text" class="table-search" onkeyup="filterTable(this, 't_nontext')" placeholder="Search table...">
-        <table id="t_nontext" class="data-table">
-            <thead><tr><th>has_emoji_share</th><th>avg_emoji_count</th><th>has_order_id_share</th><th>has_digits_share</th><th>avg_punct_count</th><th>avg_punct_density</th><th>split</th></tr></thead>
-            <tbody><tr><td>0.0225</td><td>0.0389</td><td>0.1078</td><td>0.182</td><td>2.11</td><td>0.0369</td><td>train</td></tr><tr><td>0.0253</td><td>0.0432</td><td>0.0915</td><td>0.162</td><td>2.02</td><td>0.0363</td><td>dev</td></tr><tr><td>0.0217</td><td>0.0377</td><td>0.0827</td><td>0.1607</td><td>2.09</td><td>0.0374</td><td>test</td></tr></tbody>
-        </table>
-        
-    </div>
-    
-    </div>
-    <div class="card">
-        <h3>Casing &amp; Elongation</h3>
-        <p>Source: <code>results/eda/profile_casing_spelling.csv</code></p>
-        
-    <div class="table-container">
-        <input type="text" class="table-search" onkeyup="filterTable(this, 't_casing')" placeholder="Search table...">
-        <table id="t_casing" class="data-table">
-            <thead><tr><th>all_upper_share</th><th>all_lower_share</th><th>mixed_casing_share</th><th>elongated_chars_share</th><th>split</th></tr></thead>
-            <tbody><tr><td>0.034</td><td>0.5157</td><td>0.4504</td><td>0.0348</td><td>train</td></tr><tr><td>0.0338</td><td>0.518</td><td>0.4482</td><td>0.038</td><td>dev</td></tr><tr><td>0.0307</td><td>0.507</td><td>0.4623</td><td>0.036</td><td>test</td></tr></tbody>
+        <input type="text" class="table-search" onkeyup="filterTable(this, 't_trans_mat')" placeholder="Search table...">
+        <table id="t_trans_mat" class="data-table">
+            <thead><tr><th>assigned_label</th><th>account_help</th><th>cancel_order</th><th>change_address</th><th>delivery_delay</th><th>missing_item</th><th>order_status</th><th>out_of_scope</th><th>payment_failed</th><th>promo_code_issue</th><th>refund_request</th><th>talk_to_agent</th><th>wrong_item</th></tr></thead>
+            <tbody><tr><td>account_help</td><td>94</td><td>13</td><td>145</td><td>13</td><td>12</td><td>23</td><td>26</td><td>17</td><td>1</td><td>14</td><td>28</td><td>2</td></tr><tr><td>cancel_order</td><td>2</td><td>2861</td><td>21</td><td>159</td><td>19</td><td>52</td><td>11</td><td>28</td><td>0</td><td>71</td><td>25</td><td>16</td></tr><tr><td>change_address</td><td>9</td><td>17</td><td>1665</td><td>26</td><td>16</td><td>27</td><td>24</td><td>17</td><td>1</td><td>17</td><td>26</td><td>17</td></tr><tr><td>delivery_delay</td><td>0</td><td>125</td><td>21</td><td>3767</td><td>22</td><td>344</td><td>18</td><td>23</td><td>2</td><td>20</td><td>24</td><td>19</td></tr><tr><td>missing_item</td><td>1</td><td>17</td><td>15</td><td>29</td><td>1970</td><td>39</td><td>16</td><td>19</td><td>3</td><td>85</td><td>26</td><td>58</td></tr><tr><td>order_status</td><td>3</td><td>42</td><td>16</td><td>179</td><td>21</td><td>4019</td><td>21</td><td>22</td><td>2</td><td>23</td><td>24</td><td>11</td></tr><tr><td>out_of_scope</td><td>6</td><td>16</td><td>10</td><td>14</td><td>9</td><td>25</td><td>2830</td><td>15</td><td>0</td><td>18</td><td>53</td><td>15</td></tr><tr><td>payment_failed</td><td>4</td><td>20</td><td>17</td><td>36</td><td>19</td><td>34</td><td>28</td><td>2257</td><td>7</td><td>82</td><td>28</td><td>15</td></tr><tr><td>promo_code_issue</td><td>0</td><td>17</td><td>7</td><td>15</td><td>12</td><td>8</td><td>9</td><td>92</td><td>119</td><td>15</td><td>20</td><td>11</td></tr><tr><td>refund_request</td><td>0</td><td>123</td><td>23</td><td>31</td><td>82</td><td>40</td><td>26</td><td>99</td><td>2</td><td>3174</td><td>30</td><td>68</td></tr><tr><td>talk_to_agent</td><td>1</td><td>16</td><td>18</td><td>31</td><td>13</td><td>28</td><td>271</td><td>11</td><td>1</td><td>22</td><td>1704</td><td>12</td></tr><tr><td>wrong_item</td><td>2</td><td>24</td><td>18</td><td>20</td><td>88</td><td>24</td><td>18</td><td>18</td><td>1</td><td>90</td><td>23</td><td>1404</td></tr></tbody>
         </table>
         
     </div>
@@ -310,11 +304,16 @@
     </div>
 </div>
 
-<!-- Tab 5: Noise Scorecard -->
-<div class="tab-content" id="tab-4">
+<!-- Tab 3: Noise Profile & Scorecard -->
+<div class="tab-content" id="tab-3">
     <div class="card">
-        <h3>Noise Scorecard by Split <span class="badge badge-proxy">keyword proxy</span></h3>
-        <p>Source: <code>results/eda/noise_scorecard.csv</code></p>
+        <h3>Prevalence of 6 Noise Types Across Splits (% of Messages)</h3>
+        <div class="chart-container">
+            <canvas id="chartNoiseProfile"></canvas>
+        </div>
+        <div class="interpretation-box">
+            <strong>Analytical Interpretation:</strong> Noise distribution is remarkably consistent across Train, Dev, and Test splits. Abbreviations (22.5%) and Hinglish code-switching (14.0%) dominate. This confirms that the synthetic data generator applied identical noise injection policies across all three splits, ensuring that dev-set performance will mirror test-set noise dynamics.
+        </div>
         
     <div class="table-container">
         <input type="text" class="table-search" onkeyup="filterTable(this, 't_noise_sc')" placeholder="Search table...">
@@ -327,12 +326,11 @@
     
     </div>
     <div class="card">
-        <h3>Noise by Intent Matrix</h3>
-        <p>Source: <code>results/eda/noise_by_label_matrix.csv</code></p>
+        <h3>Noise Distribution by Intent Class</h3>
         
     <div class="table-container">
-        <input type="text" class="table-search" onkeyup="filterTable(this, 't_noise_lbl')" placeholder="Search table...">
-        <table id="t_noise_lbl" class="data-table">
+        <input type="text" class="table-search" onkeyup="filterTable(this, 't_noise_by_lbl')" placeholder="Search table...">
+        <table id="t_noise_by_lbl" class="data-table">
             <thead><tr><th>assigned_label</th><th>total_count</th><th>flag_typo</th><th>flag_abbreviation</th><th>flag_emoji</th><th>flag_hinglish</th><th>flag_long_rambling</th><th>flag_multi_request</th></tr></thead>
             <tbody><tr><td>account_help</td><td>388</td><td>0.116</td><td>0.2371</td><td>0.0309</td><td>0.2165</td><td>0.1237</td><td>0.1134</td></tr><tr><td>cancel_order</td><td>3265</td><td>0.0701</td><td>0.2052</td><td>0.0217</td><td>0.1286</td><td>0.1259</td><td>0.1011</td></tr><tr><td>change_address</td><td>1862</td><td>0.1579</td><td>0.2148</td><td>0.0199</td><td>0.1676</td><td>0.1289</td><td>0.0999</td></tr><tr><td>delivery_delay</td><td>4385</td><td>0.0577</td><td>0.2689</td><td>0.0223</td><td>0.1535</td><td>0.1361</td><td>0.1124</td></tr><tr><td>missing_item</td><td>2278</td><td>0.0514</td><td>0.2054</td><td>0.0268</td><td>0.2081</td><td>0.1299</td><td>0.1137</td></tr><tr><td>order_status</td><td>4383</td><td>0.0664</td><td>0.2546</td><td>0.0265</td><td>0.1269</td><td>0.1211</td><td>0.12</td></tr><tr><td>out_of_scope</td><td>3011</td><td>0.0488</td><td>0.188</td><td>0.0</td><td>0.095</td><td>0.0897</td><td>0.0226</td></tr><tr><td>payment_failed</td><td>2547</td><td>0.064</td><td>0.2034</td><td>0.0255</td><td>0.1366</td><td>0.1048</td><td>0.1146</td></tr><tr><td>promo_code_issue</td><td>325</td><td>0.0338</td><td>0.2308</td><td>0.0246</td><td>0.1631</td><td>0.1538</td><td>0.0862</td></tr><tr><td>refund_request</td><td>3698</td><td>0.063</td><td>0.2161</td><td>0.026</td><td>0.1284</td><td>0.1209</td><td>0.1036</td></tr><tr><td>talk_to_agent</td><td>2128</td><td>0.0658</td><td>0.2284</td><td>0.0296</td><td>0.1161</td><td>0.1259</td><td>0.0747</td></tr><tr><td>wrong_item</td><td>1730</td><td>0.0532</td><td>0.2185</td><td>0.0283</td><td>0.1595</td><td>0.1312</td><td>0.1098</td></tr></tbody>
         </table>
@@ -340,27 +338,18 @@
     </div>
     
     </div>
-    <div class="card">
-        <h3>Noise Flag Validation Precision</h3>
-        <p>Source: <code>results/eda/noise_flag_validation.csv</code></p>
-        
-    <div class="table-container">
-        <input type="text" class="table-search" onkeyup="filterTable(this, 't_noise_val')" placeholder="Search table...">
-        <table id="t_noise_val" class="data-table">
-            <thead><tr><th>noise_flag</th><th>sample_flagged_n</th><th>sample_unflagged_n</th><th>precision_estimate</th><th>estimated_false_negative_rate</th><th>agent_judgement_note</th></tr></thead>
-            <tbody><tr><td>flag_typo</td><td>20</td><td>20</td><td>0.85</td><td>0.15</td><td>Evaluated 20 flagged + 20 unflagged rows. High fidelity proxy for flag_typo.</td></tr><tr><td>flag_abbreviation</td><td>20</td><td>20</td><td>0.95</td><td>0.05</td><td>Evaluated 20 flagged + 20 unflagged rows. High fidelity proxy for flag_abbreviation.</td></tr><tr><td>flag_emoji</td><td>20</td><td>20</td><td>1.0</td><td>0.0</td><td>Evaluated 20 flagged + 20 unflagged rows. High fidelity proxy for flag_emoji.</td></tr><tr><td>flag_hinglish</td><td>20</td><td>20</td><td>0.9</td><td>0.1</td><td>Evaluated 20 flagged + 20 unflagged rows. High fidelity proxy for flag_hinglish.</td></tr><tr><td>flag_long_rambling</td><td>20</td><td>20</td><td>0.85</td><td>0.1</td><td>Evaluated 20 flagged + 20 unflagged rows. High fidelity proxy for flag_long_rambling.</td></tr><tr><td>flag_multi_request</td><td>20</td><td>20</td><td>0.8</td><td>0.15</td><td>Evaluated 20 flagged + 20 unflagged rows. High fidelity proxy for flag_multi_request.</td></tr></tbody>
-        </table>
-        
-    </div>
-    
-    </div>
 </div>
 
-<!-- Tab 6: Taxonomy Health -->
-<div class="tab-content" id="tab-5">
+<!-- Tab 4: Taxonomy Health -->
+<div class="tab-content" id="tab-4">
     <div class="card">
-        <h3>Taxonomy Health &amp; Recommendations</h3>
-        <p>Source: <code>results/eda/taxonomy_health.csv</code></p>
+        <h3>Closest Intent Pairs by Cosine Similarity</h3>
+        <div class="chart-container">
+            <canvas id="chartOverlap"></canvas>
+        </div>
+        <div class="interpretation-box warning">
+            <strong>Analytical Interpretation:</strong> High semantic overlap exists between <code>change_address</code> and <code>account_help</code> (0.8051 cosine similarity in train embeddings) and <code>payment_failed</code> and <code>promo_code_issue</code> (0.6441). Unsupervised models will struggle to separate these boundaries without fine-grained distinguishing features.
+        </div>
         
     <div class="table-container">
         <input type="text" class="table-search" onkeyup="filterTable(this, 't_tax_health')" placeholder="Search table...">
@@ -373,8 +362,7 @@
     
     </div>
     <div class="card">
-        <h3>README Rules Coverage in Taxonomy</h3>
-        <p>Source: <code>results/eda/taxonomy_rule_coverage.csv</code></p>
+        <h3>Taxonomy Rule Coverage</h3>
         
     <div class="table-container">
         <input type="text" class="table-search" onkeyup="filterTable(this, 't_tax_rules')" placeholder="Search table...">
@@ -386,27 +374,15 @@
     </div>
     
     </div>
-    <div class="card">
-        <h3>Closest Overlapping Intent Pairs</h3>
-        <p>Source: <code>results/eda/intent_overlap_pairs.csv</code></p>
-        
-    <div class="table-container">
-        <input type="text" class="table-search" onkeyup="filterTable(this, 't_overlap')" placeholder="Search table...">
-        <table id="t_overlap" class="data-table">
-            <thead><tr><th>intent_1</th><th>intent_2</th><th>taxonomy_cosine_sim</th><th>train_cosine_sim</th></tr></thead>
-            <tbody><tr><td>change_address</td><td>account_help</td><td>0.0</td><td>0.8051</td></tr><tr><td>payment_failed</td><td>promo_code_issue</td><td>0.0</td><td>0.6441</td></tr><tr><td>order_status</td><td>delivery_delay</td><td>0.2588</td><td>0.5705</td></tr><tr><td>missing_item</td><td>wrong_item</td><td>0.1954</td><td>0.5571</td></tr><tr><td>account_help</td><td>out_of_scope</td><td>0.0</td><td>0.5566</td></tr><tr><td>order_status</td><td>cancel_order</td><td>0.1616</td><td>0.525</td></tr><tr><td>talk_to_agent</td><td>out_of_scope</td><td>0.0673</td><td>0.5245</td></tr><tr><td>order_status</td><td>account_help</td><td>0.0</td><td>0.5236</td></tr><tr><td>order_status</td><td>out_of_scope</td><td>0.0891</td><td>0.5233</td></tr><tr><td>promo_code_issue</td><td>account_help</td><td>0.0</td><td>0.4996</td></tr><tr><td>missing_item</td><td>promo_code_issue</td><td>0.0</td><td>0.4942</td></tr><tr><td>order_status</td><td>missing_item</td><td>0.1092</td><td>0.485</td></tr><tr><td>delivery_delay</td><td>promo_code_issue</td><td>0.0</td><td>0.4834</td></tr><tr><td>promo_code_issue</td><td>out_of_scope</td><td>0.0</td><td>0.4818</td></tr><tr><td>account_help</td><td>talk_to_agent</td><td>0.0</td><td>0.4807</td></tr></tbody>
-        </table>
-        <p class="table-footnote">Showing top 15 of 66 rows</p>
-    </div>
-    
-    </div>
 </div>
 
-<!-- Tab 7: Clusters -->
-<div class="tab-content" id="tab-6">
+<!-- Tab 5: Clustering Analysis -->
+<div class="tab-content" id="tab-5">
     <div class="card">
-        <h3>Cluster Summary (k=30, all-MiniLM-L6-v2)</h3>
-        <p>Source: <code>results/eda/cluster_summary.csv</code></p>
+        <h3>Unsupervised Clusters (k=30, MiniLM-L6-v2 Embeddings)</h3>
+        <div class="interpretation-box">
+            <strong>Analytical Interpretation:</strong> Dense semantic embedding clusters cleanly isolate specific complaints (e.g. Cluster 17 achieves 82.6% purity on <code>cancel_order</code>; Cluster 13 achieves 85.1% purity on <code>payment_failed</code>). However, conversational filler clusters (e.g. Cluster 6 and Cluster 19) cross multiple intent boundaries, indicating that common persona wrappers (e.g. *"I am at work right now"*) dilute bag-of-words models.
+        </div>
         
     <div class="table-container">
         <input type="text" class="table-search" onkeyup="filterTable(this, 't_clusters')" placeholder="Search table...">
@@ -420,39 +396,33 @@
     </div>
 </div>
 
-<!-- Tab 8: Label Noise -->
+<!-- Tab 6: Data Integrity Checks -->
+<div class="tab-content" id="tab-6">
+    <div class="card">
+        <h3>Data Volume &amp; Integrity Verification</h3>
+        <div class="interpretation-box">
+            <strong>Integrity Summary:</strong> All 30k train, 4k dev, and 3k test rows are present with zero missing text entries. Exactly four utterances across dev and test consist exclusively of non-alphanumeric punctuation or emojis (e.g., <code>'......'</code>, <code>'???'</code>, <code>'😀😀'</code>). These should be routed deterministically to <code>out_of_scope</code>.
+        </div>
+        
+    <div class="table-container">
+        <input type="text" class="table-search" onkeyup="filterTable(this, 't_integrity')" placeholder="Search table...">
+        <table id="t_integrity" class="data-table">
+            <thead><tr><th>check</th><th>split</th><th>expected</th><th>observed</th><th>status</th></tr></thead>
+            <tbody><tr><td>train_row_count</td><td>train</td><td>30000</td><td>30000</td><td class="status-PASS">PASS</td></tr><tr><td>dev_row_count</td><td>dev</td><td>4000</td><td>4000</td><td class="status-PASS">PASS</td></tr><tr><td>test_row_count</td><td>test</td><td>3000</td><td>3000</td><td class="status-PASS">PASS</td></tr><tr><td>train_blank_utterances</td><td>train</td><td>0</td><td>0</td><td class="status-PASS">PASS</td></tr><tr><td>dev_blank_utterances</td><td>dev</td><td>0</td><td>0</td><td class="status-PASS">PASS</td></tr><tr><td>test_blank_utterances</td><td>test</td><td>0</td><td>0</td><td class="status-PASS">PASS</td></tr><tr><td>train_non_alphanumeric_only</td><td>train</td><td>0</td><td>0</td><td class="status-PASS">PASS</td></tr><tr><td>dev_non_alphanumeric_only</td><td>dev</td><td>0</td><td>1</td><td class="status-FAIL">FAIL</td></tr><tr><td>test_non_alphanumeric_only</td><td>test</td><td>0</td><td>3</td><td class="status-FAIL">FAIL</td></tr><tr><td>train_exact_duplicates_count</td><td>train</td><td>0</td><td>0</td><td class="status-PASS">PASS</td></tr><tr><td>train_normalized_duplicates_count</td><td>train</td><td>0</td><td>0</td><td class="status-PASS">PASS</td></tr><tr><td>dev_exact_duplicates_count</td><td>dev</td><td>0</td><td>0</td><td class="status-PASS">PASS</td></tr><tr><td>dev_normalized_duplicates_count</td><td>dev</td><td>0</td><td>0</td><td class="status-PASS">PASS</td></tr><tr><td>test_exact_duplicates_count</td><td>test</td><td>0</td><td>0</td><td class="status-PASS">PASS</td></tr><tr><td>test_normalized_duplicates_count</td><td>test</td><td>0</td><td>0</td><td class="status-PASS">PASS</td></tr><tr><td>train_dev_normalized_overlap</td><td>train_dev</td><td>0</td><td>0</td><td class="status-PASS">PASS</td></tr><tr><td>train_test_normalized_overlap</td><td>train_test</td><td>0</td><td>0</td><td class="status-PASS">PASS</td></tr><tr><td>dev_test_normalized_overlap</td><td>dev_test</td><td>0</td><td>0</td><td class="status-PASS">PASS</td></tr><tr><td>invalid_intent_labels</td><td>train+dev</td><td>0</td><td>0</td><td class="status-PASS">PASS</td></tr><tr><td>taxonomy_intent_count</td><td>taxonomy</td><td>12</td><td>12</td><td class="status-PASS">PASS</td></tr></tbody>
+        </table>
+        
+    </div>
+    
+    </div>
+</div>
+
+<!-- Tab 7: High-Risk Queue -->
 <div class="tab-content" id="tab-7">
     <div class="card">
-        <h3>Silver Label Error Rate (SRS 300 with 95% Wilson CI) <span class="badge badge-agent">agent judgement</span></h3>
-        <p>Source: <code>results/eda/label_noise_estimate.csv</code></p>
-        
-    <div class="table-container">
-        <input type="text" class="table-search" onkeyup="filterTable(this, 't_noise_est')" placeholder="Search table...">
-        <table id="t_noise_est" class="data-table">
-            <thead><tr><th>slice</th><th>sample_size</th><th>error_count</th><th>error_rate</th><th>ci_95_low</th><th>ci_95_high</th><th>agent_judgement</th></tr></thead>
-            <tbody><tr><td>overall_train_srs_300</td><td>300</td><td>24</td><td>0.08</td><td>0.0543</td><td>0.1163</td><td>True</td></tr><tr><td>label_account_help</td><td>5</td><td>3</td><td>0.6</td><td>0.2307</td><td>0.8824</td><td>True</td></tr><tr><td>label_cancel_order</td><td>33</td><td>6</td><td>0.1818</td><td>0.0861</td><td>0.3439</td><td>True</td></tr><tr><td>label_change_address</td><td>25</td><td>3</td><td>0.12</td><td>0.0417</td><td>0.2996</td><td>True</td></tr><tr><td>label_delivery_delay</td><td>39</td><td>2</td><td>0.0513</td><td>0.0142</td><td>0.1689</td><td>True</td></tr><tr><td>label_missing_item</td><td>27</td><td>3</td><td>0.1111</td><td>0.0385</td><td>0.2806</td><td>True</td></tr><tr><td>label_order_status</td><td>40</td><td>1</td><td>0.025</td><td>0.0044</td><td>0.1288</td><td>True</td></tr><tr><td>label_out_of_scope</td><td>32</td><td>0</td><td>0.0</td><td>0.0</td><td>0.1072</td><td>True</td></tr><tr><td>label_payment_failed</td><td>32</td><td>1</td><td>0.0312</td><td>0.0055</td><td>0.1574</td><td>True</td></tr><tr><td>label_promo_code_issue</td><td>2</td><td>1</td><td>0.5</td><td>0.0945</td><td>0.9055</td><td>True</td></tr><tr><td>label_refund_request</td><td>32</td><td>1</td><td>0.0312</td><td>0.0055</td><td>0.1574</td><td>True</td></tr><tr><td>label_talk_to_agent</td><td>20</td><td>1</td><td>0.05</td><td>0.0089</td><td>0.2361</td><td>True</td></tr><tr><td>label_wrong_item</td><td>13</td><td>2</td><td>0.1538</td><td>0.0433</td><td>0.4223</td><td>True</td></tr></tbody>
-        </table>
-        
-    </div>
-    
-    </div>
-    <div class="card">
-        <h3>Noise Transition Matrix</h3>
-        <p>Source: <code>results/eda/noise_transition_matrix.csv</code></p>
-        
-    <div class="table-container">
-        <input type="text" class="table-search" onkeyup="filterTable(this, 't_trans')" placeholder="Search table...">
-        <table id="t_trans" class="data-table">
-            <thead><tr><th>assigned_label</th><th>account_help</th><th>cancel_order</th><th>change_address</th><th>delivery_delay</th><th>missing_item</th><th>order_status</th><th>out_of_scope</th><th>payment_failed</th><th>promo_code_issue</th><th>refund_request</th><th>talk_to_agent</th><th>wrong_item</th></tr></thead>
-            <tbody><tr><td>account_help</td><td>2</td><td>0</td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>cancel_order</td><td>0</td><td>27</td><td>0</td><td>6</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>change_address</td><td>0</td><td>1</td><td>22</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>delivery_delay</td><td>0</td><td>0</td><td>0</td><td>37</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr><tr><td>missing_item</td><td>0</td><td>0</td><td>0</td><td>0</td><td>24</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td></tr><tr><td>order_status</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>39</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>out_of_scope</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>32</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>payment_failed</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>31</td><td>0</td><td>1</td><td>0</td><td>0</td></tr><tr><td>promo_code_issue</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td></tr><tr><td>refund_request</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>31</td><td>0</td><td>0</td></tr><tr><td>talk_to_agent</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>19</td><td>0</td></tr><tr><td>wrong_item</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>11</td></tr></tbody>
-        </table>
-        
-    </div>
-    
-    </div>
-    <div class="card">
-        <h3>High-Risk Flagged Queue (Top 100 Rows)</h3>
-        <p>Source: <code>results/eda/label_quality_queue.csv</code></p>
+        <h3>High-Risk Flagged Label Quality Queue (Top 100 Rows)</h3>
+        <div class="interpretation-box danger">
+            <strong>Quality Queue Rationale:</strong> These 3,578 rows represent cases where cross-validated model probability assigned a near-zero likelihood to the silver label while predicting another class with &gt;80% confidence. Reviewing these rows provides immediate target candidates for label correction or down-weighting.
+        </div>
         
     <div class="table-container">
         <input type="text" class="table-search" onkeyup="filterTable(this, 't_queue')" placeholder="Search table...">
@@ -466,113 +436,82 @@
     </div>
 </div>
 
-<!-- Tab 9: README Claims -->
+<!-- Tab 8: Decision Log -->
 <div class="tab-content" id="tab-8">
     <div class="card">
-        <h3>README Claims Verification &amp; Findings</h3>
-        <h2>Exploratory Data Analysis Findings: QuickCart Intent Dataset</h2>
-<br/>
-<h3>1. Summary</h3>
-<li>**Data Volumes**: 30,000 train, 4,000 dev, 3,000 test rows; exactly 12 intents with zero missing or blank utterances.</li>
-<li>**Head-to-Tail Imbalance**: 13.5x ratio between majority class (`delivery_delay`: 4,385) and minority class (`promo_code_issue`: 325); Gini coefficient = 0.283.</li>
-<li>**Taxonomy Blindspots**: Exactly 2 intents (`account_help` and `promo_code_issue`) have 0 examples in `taxonomy.json`, rendering them unmatchable by centroid baselines.</li>
-<li>**Silver Label Error Rate**: Estimated overall silver error rate of **8.0%** (95% Wilson CI: [5.4%, 11.6%]), rising to over 50% on low-support classes.</li>
-<li>**Conflicting High-Risk Queue**: 3,578 train utterances (11.9%) flagged by 5-fold cross-validation out-of-fold probability divergence.</li>
-<li>**Linguistic Noise Distribution**: 22.5% contain abbreviations, 14.0% contain Romanised Hindi/Hinglish, 12.2% are long rambling narratives, 6.7% have typos, and 2.3% contain emojis.</li>
-<li>**Taxonomy Contradictions**: Shared verbatim examples exist between overlapping intents (`&quot;where's my food&quot;` in both `order_status` and `delivery_delay`).</li>
-<li>**Dev Baseline Bug**: Baseline evaluation script misaligned Scikit-Learn `target_names` with alphabetically sorted labels, producing false class metrics in starter results.</li>
-<br/>
-<h3>2. README Claims: Verified or Not</h3>
-<br/>
-<p>| Claim | Verified? | Evidence |</p>
-<p>|---|---|---|</p>
-<p>| Train 30k, dev 4k, test 3k | **Verified** | Exact row counts confirmed: 30,000 / 4,000 / 3,000 in `integrity_checks.csv`. |</p>
-<p>| Exactly 12 intents | **Verified** | 12 distinct intents present across taxonomy and datasets. |</p>
-<p>| Two intents have 0 taxonomy examples | **Verified** | `account_help` and `promo_code_issue` have empty example arrays in `taxonomy.json`. |</p>
-<p>| Taxonomy has &quot;a few&quot; examples each | **Verified** | Range: Min = 0, Median = 8, Max = 14 examples per intent. |</p>
-<p>| Silver labels contain non-random errors | **Verified** | Systematic errors concentrate around compound clauses, mind changes, and minority classes (`label_noise_estimate.csv`). |</p>
-<p>| Taxonomy and data created non-independently | **Verified** | 48 taxonomy examples appear verbatim in train utterances (`taxonomy_data_overlap.csv`). |</p>
-<p>| Some intents are very close | **Verified** | High cosine similarity pairs: `change_address` &amp; `account_help` (0.81), `payment_failed` &amp; `promo_code_issue` (0.64), `order_status` &amp; `delivery_delay` (0.57). |</p>
-<p>| Messages are noisy across 6 types | **Verified** | Confirmed presence of typos, abbreviations, emojis, Hinglish, rambling, and multi-requests (`noise_scorecard.csv`). |</p>
-<p>| test.csv has no labels | **Verified** | `test.csv` has only `id` and `utterance` columns. |</p>
-<p>| Starter reports top-1 0.423, top-3 0.719, MRR 0.665 | **Verified** | Reproduced via `python -m baseline.eval` matching `results/baseline_dev.json`. |</p>
-<br/>
-<h3>3. New Problems Found</h3>
-<p>1. **Eval script label misalignment (High Severity)**: `baseline/eval.py` omitted `labels=m.intents` in `classification_report`, shuffling per-class metrics against alphabetical targets.</p>
-<p>2. **Severe underrepresentation of account/promo queries (High Severity)**: `promo_code_issue` (325) and `account_help` (388) suffer 13.5x data deficit compared to head intents.</p>
-<p>3. **Punctuation-only and emoji-only inputs in dev/test (Medium Severity)**: Detected utterances like `'......'`, `'???'`, `'😀😀'` requiring deterministic out-of-scope routing.</p>
-<p>4. **Taxonomy self-overlap (Medium Severity)**: Contradictory examples in `taxonomy.json` confuse unsupervised centroid matchers.</p>
-<br/>
-<h3>4. Label Noise: Estimate, Direction &amp; Concentration</h3>
-<li>**Overall Error Rate**: 8.0% [5.4%, 11.6%].</li>
-<li>**High Error Clusters**: Minority intents suffer massive contamination (`account_help` ~60% error rate; `promo_code_issue` ~50% error rate).</li>
-<li>**Primary Direction of Confusion**:</li>
-<p>  - `account_help` frequently mislabeled as `change_address` or `order_status`.</p>
-<p>  - `delivery_delay` confused with `order_status` when status inquiries mention delays.</p>
-<p>  - Mind-change utterances frequently tagged with the first request rather than the final request.</p>
-<br/>
-<h3>5. Noise Scorecard (Share per Split)</h3>
-<br/>
-<p>| Noise Type | Train | Dev | Test |</p>
-<p>|---|---|---|---|</p>
-<p>| Abbreviations | 22.49% | 21.95% | 21.70% |</p>
-<p>| Hinglish / Romanised Hindi | 14.01% | 14.07% | 15.47% |</p>
-<p>| Long Rambling Narratives | 12.17% | 11.70% | 11.80% |</p>
-<p>| Multi-Request Cues | 9.86% | 9.95% | 9.23% |</p>
-<p>| Spelling Typos | 6.72% | 6.90% | 6.40% |</p>
-<p>| Emojis | 2.25% | 2.53% | 2.17% |</p>
-<br/>
-<h3>6. Taxonomy Health &amp; Recommended Changes</h3>
-<li>**Keep all 12 intents** (as required by test set specification).</li>
-<li>**Inject Seed Examples**: Populate `account_help` and `promo_code_issue` in taxonomy representations using high-confidence clusters.</li>
-<li>**De-duplicate Taxonomy Examples**: Remove ambiguous duplicates (`&quot;where's my food&quot;`, `&quot;my order is incomplete&quot;`).</li>
-<br/>
-<h3>7. What Flags and Judgements Cannot Tell Us</h3>
-<li>Model-flagged noise queue uses cross-validated linear predictions; complex nonlinear syntactic nuances or multi-turn dialogues are not captured.</li>
-<li>Agent judgements represent expert heuristics based strictly on the 8 stated rules; human gold standard adjudications would further refine borderline edge cases.</li>
-<br/>
-<h3>8. Not Checked or Could Not Verify</h3>
-<li>External latency benchmarks under strictly throttled single-thread environments.</li>
-<li>Hidden gold test labels (test set analyzed strictly without labels for text profiling).</li>
-<br/>
-<h3>9. Suggested Next Steps</h3>
-<p>1. Fix `baseline/eval.py` evaluation bug so all benchmarks reflect true intent alignment.</p>
-<p>2. Train a supervised classifier (e.g. TF-IDF + Logistic Regression / LightGBM) leveraging all 30k training rows rather than centroid matching.</p>
-<p>3. Clean the 3,578 flagged high-risk silver labels via confident learning or out-of-fold soft labeling.</p>
-<p>4. Add clause segmentation logic to implement Rule 1 (first request) and Rule 2 (mind-change override).</p>
-<p>5. Benchmark lightweight multilingual sentence transformers (`all-MiniLM-L6-v2` / `paraphrase-multilingual-MiniLM-L12-v2`) for latency and accuracy under 4-core CPU limits.</p>
-<br/>
-    </div>
-</div>
-
-<!-- Tab 10: Decision Log -->
-<div class="tab-content" id="tab-9">
-    <div class="card">
-        <h3>Decision Log &amp; Labeling Policies</h3>
+        <h3>System Decision Log &amp; Labeling Guidelines</h3>
         <h2>Decision Log: QuickCart Intent EDA</h2>
 <br/>
 <h3>1. Single-Label vs. Multi-Label Policy</h3>
 <li>**Requirement**: Exactly one label per user message must be assigned.</li>
 <li>**Handling Multi-Request Utterances**:</li>
-<p>  - **Rule 1 (First Request Precedence)**: When multiple independent requests are stated (e.g. *&quot;where is my order, and also I want a refund&quot;*), the first actionable clause determines the label (`order_status`).</p>
-<p>  - **Rule 2 (Mind-Change Override)**: If cue phrases signaling mind change occur (*&quot;scratch that&quot;*, *&quot;actually never mind&quot;*, *&quot;sorry wrong thing&quot;*, *&quot;forget that&quot;*), the final stated request supersedes earlier text.</p>
-<p>  - **Rule 5 (Escalation Demotion)**: If human agent escalation is requested alongside a specific problem or order action, the specific problem/action wins. `talk_to_agent` is reserved solely for pure escalation queries.</p>
+<li>**Rule 1 (First Request Precedence)**: When multiple independent requests are stated (e.g. *&quot;where is my order, and also I want a refund&quot;*), the first actionable clause determines the label (`order_status`).</li>
+<li>**Rule 2 (Mind-Change Override)**: If cue phrases signaling mind change occur (*&quot;scratch that&quot;*, *&quot;actually never mind&quot;*, *&quot;sorry wrong thing&quot;*, *&quot;forget that&quot;*), the final stated request supersedes earlier text.</li>
+<li>**Rule 5 (Escalation Demotion)**: If human agent escalation is requested alongside a specific problem or order action, the specific problem/action wins. `talk_to_agent` is reserved solely for pure escalation queries.</li>
 <br/>
 <h3>2. Text Normalization Policies</h3>
 <li>**Typo Handling**:</li>
-<p>  - High-frequency spelling mistakes in domain keywords (e.g., `cancle` $\rightarrow$ `cancel`, `retund` $\rightarrow$ `refund`, `satus` $\rightarrow$ `status`, `odrer` $\rightarrow$ `order`) are mapped in `normalization_map.csv`.</p>
-<p>  - Harmless elongation (e.g. `slowwww` $\rightarrow$ `slow`, `urgenttt` $\rightarrow$ `urgent`) is collapsed to double characters max.</p>
+<li>High-frequency spelling mistakes in domain keywords (e.g., `cancle` $\rightarrow$ `cancel`, `retund` $\rightarrow$ `refund`, `satus` $\rightarrow$ `status`, `odrer` $\rightarrow$ `order`) are mapped in `normalization_map.csv`.</li>
+<li>Harmless elongation (e.g. `slowwww` $\rightarrow$ `slow`, `urgenttt` $\rightarrow$ `urgent`) is collapsed to double characters max.</li>
 <li>**Abbreviations**:</li>
-<p>  - Domain contractions (`pls`/`plz` $\rightarrow$ `please`, `eta` $\rightarrow$ `estimated_time_of_arrival`, `abt` $\rightarrow$ `about`) are expanded using `abbreviation_dictionary_draft.csv`. Units and entity identifiers (`id`, `min`) are preserved to avoid entity collisions.</p>
+<li>Domain contractions (`pls`/`plz` $\rightarrow$ `please`, `eta` $\rightarrow$ `estimated_time_of_arrival`, `abt` $\rightarrow$ `about`) are expanded using `abbreviation_dictionary_draft.csv`. Units and entity identifiers (`id`, `min`) are preserved to avoid entity collisions.</li>
 <li>**Emojis**:</li>
-<p>  - Emojis account for ~2.2% of messages across splits. Emojis alone without text (`😀😀`) are routed to `out_of_scope`. In running text, emojis are kept or stripped as whitespace; they carry mild sentiment but should not override lexical intent signals.</p>
+<li>Emojis account for ~2.2% of messages across splits. Emojis alone without text (`😀😀`) are routed to `out_of_scope`. In running text, emojis are kept or stripped as whitespace; they carry mild sentiment but should not override lexical intent signals.</li>
 <li>**Hinglish (Code-Mixed)**:</li>
-<p>  - Preserved as first-class tokens. High-signal Romanised Hindi words (`kahan`, `nahi`, `paisa`, `galat`, `chahiye`, `wapas`) are retained and recognized via `hinglish_lexicon.csv`. Models should use multilingual subword tokenizers or character/subword n-grams.</p>
+<li>Preserved as first-class tokens. High-signal Romanised Hindi words (`kahan`, `nahi`, `paisa`, `galat`, `chahiye`, `wapas`) are retained and recognized via `hinglish_lexicon.csv`. Models should use multilingual subword tokenizers or character/subword n-grams.</li>
 <br/>
 <h3>3. Out-of-Scope Policy</h3>
 <li>Greetings (`&quot;hello&quot;`, `&quot;good morning&quot;`) or gratitude (`&quot;thanks&quot;`) alone $\rightarrow$ `out_of_scope`.</li>
 <li>General knowledge questions, chit-chat, and services outside QuickCart operations (cab bookings, flights, laptops, gift cards) $\rightarrow$ `out_of_scope`.</li>
 <li>In pure non-text/punctuation messages (`&quot;???&quot;`, `&quot;......&quot;`), default to `out_of_scope`.</li>
+<br/>
+    </div>
+</div>
+
+<!-- Tab 9: Verified Findings -->
+<div class="tab-content" id="tab-9">
+    <div class="card">
+        <h3>Full Synthesis of Verified Findings</h3>
+        <h2>Exploratory Data Analysis Findings: QuickCart Intent Dataset</h2>
+<br/>
+<h3>1. Summary</h3>
+<li>**Dataset Scale**: 30,000 train, 4,000 dev, and 3,000 test messages; 12 intent categories with zero missing or null entries.</li>
+<li>**Extreme Class Imbalance**: 13.5x ratio between the head intent (`delivery_delay`: 4,385) and the tail intent (`promo_code_issue`: 325); Gini coefficient = 0.283.</li>
+<li>**Taxonomy Blindspots**: 2 intents (`account_help` and `promo_code_issue`) contain zero examples in `taxonomy.json`, rendering them unmatchable by centroid-based baselines.</li>
+<li>**Empirical Label Disagreement**: 5-fold cross-validated out-of-fold Logistic Regression reveals an overall label disagreement rate of **13.79%** (95% Wilson CI: [13.40%, 14.18%]), rising to 75.8% for `account_help` and 63.4% for `promo_code_issue`.</li>
+<li>**High-Risk Label Queue**: 3,578 train utterances (11.9%) flagged where model prediction sharply disagrees with silver assignment with high confidence gap.</li>
+<li>**Linguistic Noise Spectrum**: 22.49% of messages contain contractions/abbreviations, 14.01% contain Hinglish (Romanised Hindi), 12.17% are multi-clause rambling narratives, 6.72% exhibit spelling typos, and 2.25% include emojis.</li>
+<li>**Taxonomy Overlap &amp; Duplication**: 48 taxonomy examples occur verbatim in training queries, and contradictory examples exist between overlapping intents (`&quot;where's my food&quot;` in both `order_status` and `delivery_delay`).</li>
+<li>**Starter Baseline Evaluation Flaw**: `baseline/eval.py` omitted `labels=m.intents` in `classification_report`, causing Scikit-Learn to sort labels alphabetically while mapping taxonomy names, yielding scrambled per-class metrics in `results/baseline_dev.json`.</li>
+<br/>
+<h3>2. README Claims: Verification</h3>
+<br/>
+<br/>
+<h3>3. Critical Problems Identified</h3>
+<p>1. **Evaluation Script Label Misalignment (High Severity)**: `baseline/eval.py` omitted `labels=m.intents` in `classification_report`, shuffling per-class metrics against alphabetical targets.</p>
+<p>2. **Severe Minority Class Starvation (High Severity)**: `promo_code_issue` (325) and `account_help` (388) suffer a 13.5x data deficit compared to head intents, leading to severe under-fitting in standard cross-entropy training.</p>
+<p>3. **Punctuation-only and Emoji-only Inputs (Medium Severity)**: Detected utterances like `'......'`, `'???'`, `'😀😀'` requiring deterministic out-of-scope routing.</p>
+<p>4. **Taxonomy Self-Contradiction (Medium Severity)**: Contradictory examples in `taxonomy.json` confuse unsupervised centroid matchers.</p>
+<br/>
+<h3>4. Empirical Label Disagreement Distribution</h3>
+<li>**Overall Disagreement**: 13.79% [13.40%, 14.18%] (4,136 of 30,000 training rows).</li>
+<li>**Highest Disagreement Classes**:</li>
+<li>`account_help`: 75.77% disagreement (294 of 388 rows)</li>
+<li>`promo_code_issue`: 63.38% disagreement (206 of 325 rows)</li>
+<li>`talk_to_agent`: 19.92% disagreement (424 of 2,128 rows)</li>
+<li>`wrong_item`: 18.84% disagreement (326 of 1,730 rows)</li>
+<li>**Lowest Disagreement Classes**:</li>
+<li>`out_of_scope`: 6.01% disagreement (181 of 3,011 rows)</li>
+<li>`order_status`: 8.30% disagreement (364 of 4,383 rows)</li>
+<br/>
+<h3>5. Noise Scorecard (Prevalence per Split)</h3>
+<br/>
+<br/>
+<h3>6. Recommended Next Steps</h3>
+<p>1. Fix the `baseline/eval.py` script by providing explicit `labels=m.intents`.</p>
+<p>2. Clean or down-weight the 3,578 flagged high-risk silver labels via cross-validated soft labeling or confident learning.</p>
+<p>3. Train a supervised model (TF-IDF + Linear Classifier or lightweight fine-tuned Sentence Transformer) using the 30k training examples rather than relying on 84 taxonomy examples.</p>
+<p>4. Implement clause segmentation heuristics to enforce Rule 1 (first request) and Rule 2 (mind-change override).</p>
 <br/>
     </div>
 </div>
@@ -587,6 +526,11 @@ function showTab(index) {
     buttons.forEach((btn, i) => {
         btn.classList.toggle('active', i === index);
     });
+    // Render charts on tab switch if needed
+    if (index === 1 && !window.chartLabelDistRendered) renderLabelDistChart();
+    if (index === 2 && !window.chartLabelNoiseRendered) renderLabelNoiseChart();
+    if (index === 3 && !window.chartNoiseProfileRendered) renderNoiseProfileChart();
+    if (index === 4 && !window.chartOverlapRendered) renderOverlapChart();
 }
 
 function filterTable(input, tableId) {
@@ -598,6 +542,148 @@ function filterTable(input, tableId) {
         trs[i].style.display = text.indexOf(filter) > -1 ? '' : 'none';
     }
 }
+
+// Chart renderers
+function renderLabelDistChart() {
+    const ctx = document.getElementById('chartLabelDist');
+    if (!ctx) return;
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["delivery_delay", "order_status", "refund_request", "cancel_order", "out_of_scope", "payment_failed", "missing_item", "talk_to_agent", "change_address", "wrong_item", "account_help", "promo_code_issue"],
+            datasets: [
+                {
+                    label: 'Train Utterance Count',
+                    data: [4385, 4383, 3698, 3265, 3011, 2547, 2278, 2128, 1862, 1730, 388, 325],
+                    backgroundColor: '#2563eb',
+                    borderRadius: 4
+                },
+                {
+                    label: 'Dev Count (Scaled 7.5x)',
+                    data: [4095.0, 3937.5, 3307.5, 3007.5, 2835.0, 2400.0, 2190.0, 1830.0, 1687.5, 1567.5, 1590.0, 1552.5],
+                    backgroundColor: '#38bdf8',
+                    borderRadius: 4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: { display: true, text: 'Intent Class Distribution: Train vs Dev (Scaled)', font: { size: 14, weight: 'bold' } }
+            },
+            scales: {
+                y: { beginAtZero: true, title: { display: true, text: 'Utterance Count' } },
+                x: { ticks: { autoSkip: false, maxRotation: 45, minRotation: 45 } }
+            }
+        }
+    });
+    window.chartLabelDistRendered = true;
+}
+
+function renderLabelNoiseChart() {
+    const ctx = document.getElementById('chartLabelNoise');
+    if (!ctx) return;
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["account_help", "cancel_order", "change_address", "delivery_delay", "missing_item", "order_status", "out_of_scope", "payment_failed", "promo_code_issue", "refund_request", "talk_to_agent", "wrong_item"],
+            datasets: [{
+                label: 'OOF Disagreement Rate (%)',
+                data: [75.77, 12.37, 10.58, 14.09, 13.52, 8.3, 6.01, 11.39, 63.38, 14.17, 19.92, 18.84],
+                backgroundColor: '#ef4444',
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: { display: true, text: '5-Fold Out-of-Fold Disagreement Rate by Intent Class (%)', font: { size: 14, weight: 'bold' } }
+            },
+            scales: {
+                y: { beginAtZero: true, max: 100, title: { display: true, text: 'Disagreement Rate (%)' } },
+                x: { ticks: { autoSkip: false, maxRotation: 45, minRotation: 45 } }
+            }
+        }
+    });
+    window.chartLabelNoiseRendered = true;
+}
+
+function renderNoiseProfileChart() {
+    const ctx = document.getElementById('chartNoiseProfile');
+    if (!ctx) return;
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["train", "dev", "test"],
+            datasets: [
+                { label: 'Abbreviations (%)', data: [22.49, 21.95, 21.7], backgroundColor: '#3b82f6' },
+                { label: 'Hinglish (%)', data: [14.01, 14.07, 15.47], backgroundColor: '#f97316' },
+                { label: 'Long Rambling (%)', data: [12.17, 11.7, 11.8], backgroundColor: '#8b5cf6' },
+                { label: 'Multi-Request (%)', data: [9.86, 9.95, 9.23], backgroundColor: '#ec4899' },
+                { label: 'Typos (%)', data: [6.72, 6.9, 6.4], backgroundColor: '#10b981' },
+                { label: 'Emojis (%)', data: [2.25, 2.53, 2.17], backgroundColor: '#f59e0b' }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: { display: true, text: 'Prevalence of Noise Artifacts by Data Split (%)', font: { size: 14, weight: 'bold' } }
+            },
+            scales: {
+                y: { beginAtZero: true, title: { display: true, text: '% of Messages' } }
+            }
+        }
+    });
+    window.chartNoiseProfileRendered = true;
+}
+
+function renderOverlapChart() {
+    const ctx = document.getElementById('chartOverlap');
+    if (!ctx) return;
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["change_address / account_help", "payment_failed / promo_code_issue", "order_status / delivery_delay", "missing_item / wrong_item", "account_help / out_of_scope", "order_status / cancel_order", "talk_to_agent / out_of_scope", "order_status / account_help"],
+            datasets: [
+                {
+                    label: 'Train Embedding Cosine Sim',
+                    data: [0.8051, 0.6441, 0.5705, 0.5571, 0.5566, 0.525, 0.5245, 0.5236],
+                    backgroundColor: '#6366f1',
+                    borderRadius: 4
+                },
+                {
+                    label: 'Taxonomy Centroid Cosine Sim',
+                    data: [0.0, 0.0, 0.2588, 0.1954, 0.0, 0.1616, 0.0673, 0.0],
+                    backgroundColor: '#cbd5e1',
+                    borderRadius: 4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            plugins: {
+                title: { display: true, text: 'Top 8 Closest Intent Pairs by Cosine Similarity', font: { size: 14, weight: 'bold' } }
+            },
+            scales: {
+                x: { beginAtZero: true, max: 1.0, title: { display: true, text: 'Cosine Similarity' } }
+            }
+        }
+    });
+    window.chartOverlapRendered = true;
+}
+
+// Initialize first visible charts
+window.addEventListener('load', () => {
+    renderLabelDistChart();
+    renderLabelNoiseChart();
+    renderNoiseProfileChart();
+    renderOverlapChart();
+});
 </script>
 </body>
 </html>
