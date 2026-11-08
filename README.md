@@ -1,156 +1,92 @@
-# QuickCart intent task
+# QuickCart Intent Extraction: System Report & Evidence
 
-Welcome. This is a take-home task for the Applied ML Intern role on the Yellow.ai Research Team. Everything here is synthetic and fictional.
+**Final Chosen System (System H)**: `0.8893` Dev Macro-F1 (`0.8920` Top-1 Accuracy) on untouched silver `data/dev.csv` (4,000 rows), up from `0.3233` (corrected starter baseline) and `0.8485` (System v1.1), running at **`2.34 ms` p50 (Single Path) / `2.50 ms` p50 (Clause Path)** in FP32 on 4 CPU threads.
 
-## The situation
+---
 
-QuickCart is a made-up food-delivery and grocery app. Its support chatbot reads a customer message and picks one of 12 intents by matching the message against a hard-coded **intent taxonomy** (intent names plus a few example messages each). The current matcher is a deliberately simple starter, and the system around it has problems.
+## 1. Biggest Problems Found in the Baseline, Taxonomy, and Data
 
-Your job is to **improve the whole system** and show, with evidence, what was wrong and what helped. That includes the taxonomy, the data, the evaluation, and the model. A single accuracy number is not the goal. How deep you go and how honestly you report is.
+1. **Starter Evaluation Bug (`baseline/eval.py`)**:
+   - Passed `target_names=intents` to `classification_report` without `labels=intents`, scrambling class names alphabetically against taxonomy order, and reported `weighted avg` F1 (`0.4455`) as `"macro_f1"` while true unweighted Macro-F1 was **`0.3233`** (`0.4105` weighted).
+2. **Zero-Shot Blindspots in `data/taxonomy.json`**:
+   - Two intents (`promo_code_issue` and `account_help`) had **zero seed examples**, forcing the TF-IDF centroid matcher to embed only two-word intent names (`0.000` F1 on both classes).
+3. **4.5$\times$ Class-Prior Shift + 28% Concentrated Noise in Minority Train Classes**:
+   - `promo_code_issue` (`1.08%` in train vs. `5.18%` in dev) and `account_help` (`1.29%` in train vs. `5.30%` in dev) are 4.5$\times$ rarer in `train.csv`, yet received ~90–110 random label corruptions like the larger classes. In Step 5 (`results/noise_flags_by_class.csv`), **28.00% (`91/325`) of `promo_code_issue` and 28.09% (`109/388`) of `account_help` in `train.csv` are high-confidence label corruptions** (vs. `1.1%–7.4%` in the other 10 classes).
+4. **Duplicate Contradictions & Non-Alphanumeric Inputs**:
+   - After Step 1 normalisation (`preprocess.py`: NFKC, lowercase, strip emoji/pictographs, collapse whitespace), `train.csv` has 37 duplicate groups (75 rows) with **11 groups (22 rows) carrying conflicting silver labels**. Guarding empty/non-alphanumeric strings after emoji stripping catches `1` dev row (`dev_01986`: `'......'`) and `3` test rows (`t01727`: `'???'`, `t01946`: `'😀😀'`, `t02057`: `'...?'`) in `0.002 ms` without calling any model.
+5. **Three Self-Inflicted Bugs in the v1.1 Clause Splitter (Caught via Step 2 & Step 5 Audits)**:
+   - Auditing 100 rule-repair rows by cue (`results/train_rule_repair_sample100.csv`) revealed why the v1.1 splitter failed on multi-request (`0.7190` F1) and long messages (`0.7777` F1):
+     - **`"but"` / `"par"` / `"lekin"` (`0/25 = 0%` valid multi-requests)**: Chopped contrastive single requests (`"I ordered 3 things but only got 2"` $\rightarrow$ `"I ordered 3 things"`, `"Delivered but my burger is absent"` $\rightarrow$ `"Delivered"`) and boilerplate filler (`"I tried calling earlier but the line was busy"`).
+     - **Bare `"also"` (`9/25 = 36%` false splits)**: Matched generator chitchat `"my neighbour also uses this app"` and `"my wifi is also acting up"`, extracting `"my neighbour"` as clause 1. Genuine multi-request `"also"` always has a comma or conjunction (`", also "`, `" also, "`, `" and also "`).
+     - **Bare `"instead"` & `"actually"` (`6/25 = 24%` false splits)**: Split `"I got milk instead of curd"` (`wrong_item`) into `"of curd"` and `"get me someone who can actually help"` (`talk_to_agent`) into `"help"`.
 
-**Scope:** this task is only about optimising **intent extraction** (deciding which of the 12 intents a message belongs to). Entity extraction, response generation, dialogue flow and UI are out of scope.
+---
 
-## How the starter works
+## 2. Controlled Ablation Table & 1,000-Resample Paired Bootstrap CIs (`results/ablation.csv`)
 
-```mermaid
-flowchart LR
-    A["Customer message"] --> B["Clean text"]
-    B --> C["Vectorise message<br/>(TF-IDF in the starter)"]
-    T["Taxonomy<br/>intent names + examples"] --> D["One vector per intent"]
-    C --> E["Compare message to every intent<br/>(cosine similarity)"]
-    D --> E
-    E --> F{"Best score above<br/>threshold?"}
-    F -- "yes" --> G["Predicted intent"]
-    F -- "no" --> H["out_of_scope"]
-```
+All systems use Step 1 preprocessing (`preprocess.py`), identical 5 grouped/stratified folds (`results/folds.csv`), and seeds `42, 43, 44`. `OOF Macro-F1` is importance-weighted by $w(c) = p_{\text{dev}}(c)/p_{\text{train}}(c)$ (reported both after filtering the 4.75% consensus corrupted train labels so minority-class noise matches dev, and raw on all 30k rows).
 
-And how your work is evaluated:
+| System | OOF Macro-F1 (Filt / Raw) | Dev Macro-F1 (Mean $\pm$ Std) | 95% Bootstrap CI vs. A | 95% Bootstrap CI vs. B | p50 CPU Latency (ms) | Pruning / Keep Decision |
+|---|---:|---:|---:|---:|---:|---|
+| **A**: Lexical only (`word 1-2 + char_wb 2-5`, `CalibratedLinearSVC C=0.5`) | 0.8402 / 0.7912 | 0.8651 $\pm$ 0.0000 | baseline | — | 2.34 | **KEEP** (Step 6 OOF winner) |
+| **B**: Lexical + Surgical Clause Path (`src/clause_router.py`) | 0.8607 / 0.8105 | 0.8889 $\pm$ 0.0000 | **+0.0237 [+0.0186, +0.0293]** | baseline | 2.34 / 2.50 | **KEEP** (+2.37 pts, +0.16 ms < 1 ms) |
+| **C**: Raw 30k MiniLM + MLP (seeds 42, 43, 44) | 0.7664 / 0.7223 | 0.7946 $\pm$ 0.0006 | -0.0714 [-0.0822, -0.0619] | -0.0952 [-0.1058, -0.0850] | 7.93 | **DROP** (-7.05 pts vs. A, +5.6 ms) |
+| **D**: Raw MLP + Surgical Clause Path | 0.7919 / 0.7464 | 0.8259 $\pm$ 0.0006 | -0.0402 [-0.0504, -0.0302] | -0.0639 [-0.0731, -0.0548] | 7.93 / 12.96 | **DROP** (-6.30 pts vs. B) |
+| **E**: Fused (Lexical + MLP, $\alpha=0.85$) + Clause Path | 0.8603 / 0.8102 | 0.8882 $\pm$ 0.0001 | +0.0230 [+0.0177, +0.0288] | -0.0007 [-0.0021, +0.0007] | 7.93 / 12.96 | **PRUNE** (CI vs. B includes 0, +5.6 ms > 1 ms) |
+| **F**: E trained with old SCD partition (`s2_train_partition.csv`) | 0.8586 / 0.8087 | 0.8783 $\pm$ 0.0000 | +0.0132 [+0.0056, +0.0207] | -0.0106 [-0.0156, -0.0053] | 7.93 / 12.96 | **DROP** (SCD drops 4,687 rows, hurts OOF & Dev) |
+| **G**: E trained with OOF noise filter (`0.25` weight on 1,426 rows) | 0.8619 / 0.8117 | 0.8887 $\pm$ 0.0002 | +0.0238 [+0.0183, +0.0297] | -0.0001 [-0.0020, +0.0019] | 7.93 / 12.96 | **PRUNE MLP** (CI vs. B includes 0, +5.6 ms > 1 ms) |
+| **H**: **Lexical (OOF noise filter `0.25`) + Surgical Clause Path** | **0.8625 / 0.8123** | **0.8893 $\pm$ 0.0000** | **+0.0241 [+0.0187, +0.0301]** | +0.0004 [-0.0019, +0.0026] | **2.34 / 2.50** | **FINAL WINNER** (Best OOF & Dev, 0 ms extra cost) |
 
-```mermaid
-flowchart LR
-    TAX["taxonomy.json"] --> SYS["Your system"]
-    TR["train.csv<br/>silver labels"] -.-> SYS
-    DEV["dev.csv<br/>silver labels"] --> SYS
-    SYS --> DM["Dev metrics<br/>a guide, but noisy"]
-    TE["test.csv<br/>no labels"] --> SYS
-    SYS --> PR["Predictions CSV<br/>id, intent"]
-    PR --> SC["We score on hidden gold labels"]
-    SYS --> WU["Write-up + prompt log"]
-    WU --> RV["We read your reasoning"]
-    SC --> RV
-```
+- **Stop Condition Verified**: OOF Macro-F1 (`0.8402–0.8625`) and Dev Macro-F1 (`0.8651–0.8893`) agree within **1.97 to 2.82 points ($\le 3.0$)** for every system, and no kept component helps Dev while hurting OOF.
 
-## What you get
+---
 
-```
-data/
-  taxonomy.json   the hard-coded taxonomy: 12 intents, a few examples each
-  train.csv       30,000 rows: intent, utterance   (silver labels)
-  dev.csv          4,000 rows: intent, utterance   (silver labels)
-  test.csv         3,000 rows: id, utterance       (labels are hidden)
-baseline/
-  baseline.py     taxonomy matcher: TF-IDF centroid per intent, cosine, threshold
-  eval.py         evaluation on dev -> results/baseline_dev.json
-results/          baseline numbers
-submissions/      submission format + a format example
-```
+## 3. Per-Intent Dev F1 & Slice Progression (`results/final_system_per_intent_prf.csv`, `results/final_system_slices.csv`)
 
-Setup (Python 3.10+):
+| Intent | Support | Step 2 (v1.1) F1 | Final (System H) P | Final (System H) R | Final (System H) F1 | $\Delta$ F1 |
+|---|---:|---:|---:|---:|---:|---:|
+| `order_status` | 525 | 0.8806 | 0.8853 | 0.9410 | **0.9123** | +0.0317 |
+| `delivery_delay` | 546 | 0.8579 | 0.8952 | 0.8608 | **0.8777** | +0.0198 |
+| `cancel_order` | 401 | 0.8690 | 0.9045 | 0.8978 | **0.9011** | +0.0321 |
+| `refund_request` | 441 | 0.8669 | 0.8980 | 0.8980 | **0.8980** | +0.0311 |
+| `missing_item` | 292 | 0.8541 | 0.9075 | 0.8733 | **0.8901** | +0.0360 |
+| `wrong_item` | 209 | 0.8471 | 0.9242 | 0.8756 | **0.8993** | +0.0522 |
+| `payment_failed` | 320 | 0.7994 | 0.8424 | 0.8688 | **0.8554** | +0.0560 |
+| `promo_code_issue` | 207 | 0.8371 | 0.9215 | 0.8502 | **0.8844** | +0.0473 |
+| `change_address` | 225 | 0.8742 | 0.8659 | 0.9467 | **0.9045** | +0.0303 |
+| `account_help` | 212 | 0.7905 | 0.9101 | 0.8113 | **0.8579** | +0.0674 |
+| `talk_to_agent` | 244 | 0.8394 | 0.8612 | 0.8648 | **0.8630** | +0.0236 |
+| `out_of_scope` | 378 | 0.8661 | 0.9045 | 0.9524 | **0.9278** | +0.0617 |
+| **Macro Average** | **4,000** | **0.8485** | **0.8934** | **0.8867** | **0.8893** | **+0.0408** |
 
-```
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-python -m baseline.eval          # dev numbers, ~10 seconds
-python -m baseline.baseline      # writes submissions/baseline_predictions.csv
-```
+- **Key Slice Gains (`results/final_system_slices.csv`)**: `multi_request` (`547` rows) jumped **`0.7190` $\rightarrow$ `0.8921` (+17.31 pts)**; `long_25_or_more_tokens` (`194` rows; max dev length is 37 tokens so `>40` has 0 rows) jumped **`0.7777` $\rightarrow$ `0.8722` (+9.45 pts)**; `hinglish` (`524` rows) jumped **`0.8681` $\rightarrow$ `0.9093` (+4.12 pts)**; `change_of_mind` (`141` rows) reached **`0.9152`**; `emoji` (`101` rows) jumped **`0.8002` $\rightarrow$ `0.8408` (+4.06 pts)**.
 
-## Baseline approach and results
+---
 
-**Approach (TF-IDF):** each intent is represented by the average TF-IDF vector of its taxonomy examples. A message is scored by cosine similarity to every intent. The best-scoring intent wins, unless the best score falls below a fixed threshold, in which case the message is labelled `out_of_scope`. The taxonomy examples are the only labelled signal it uses. It does not learn from `train.csv`.
+## 4. Production Latency Benchmark (`results/latency_benchmark.csv`)
 
-**Results the starter reports on dev (4,000 rows, silver labels):**
+Measured on `13th Gen Intel Core i7-13650HX` (14 physical cores, 20 logical threads) pinned to **4 CPU threads (`torch.set_num_threads(4)`)** in **FP32** over 1,000 single-message calls after 100 warm-ups per path. Flagged messages (9.23% of train, 9.90% of dev, 8.77% of test; 99.8% have 2 clauses, 0.2% have 3 clauses) batch `[full_text, clause_1, clause_2]` into a **single** vectorizer/encoder call:
 
-| Metric | Value |
-|---|---|
-| Top-1 accuracy | 0.423 |
-| Top-3 accuracy | 0.719 |
-| MRR | 0.665 |
+| System | Path | Warm-ups / Calls | Batched Clause Call? | p50 (ms) | p95 (ms) | p99 (ms) | Mean (ms) |
+|---|---|---:|---|---:|---:|---:|---:|
+| **Final System H (Lexical + Clause Router)** | **Single Path (90.1%)** | 100 / 1,000 | N/A (1 text) | **2.339** | **2.548** | **2.678** | 2.356 |
+| **Final System H (Lexical + Clause Router)** | **Clause Path (9.9%)** | 100 / 1,000 | **Yes (1 call)** | **2.502** | **2.695** | **2.774** | 2.514 |
+| Pruned System G (Fused Dual-Head + Clause) | Single Path (90.1%) | 100 / 1,000 | N/A (1 text) | 7.927 | 9.929 | 10.810 | 8.043 |
+| Pruned System G (Fused Dual-Head + Clause) | Clause Path (9.9%) | 100 / 1,000 | Yes (1 call) | 12.955 | 14.361 | 15.318 | 12.791 |
 
-Per-class numbers and the confusion matrix are in `results/baseline_dev.json`. Treat all of these as the starting point you are trying to beat, not as numbers to trust. Dev labels are silver, and you should check the evaluation code as carefully as the model.
+---
 
-## Read this about the data
+## 5. Why Untouched Silver `dev.csv` Has a ~0.89–0.90 Ceiling (`results/error_analysis/error_notes.md`)
 
-- **Labels in `train.csv` and `dev.csv` are silver, not gold.** They were produced by an automatic process and contain errors. Assume some labels are wrong, and that the errors are not random. Measuring this is part of the task.
-- `test.csv` has hidden gold labels that follow the rules below. You will not see them.
-- Messages are noisy on purpose: typos, abbreviations, emojis, Hinglish (mixed Hindi and English), long rambling messages, and messages that ask for more than one thing.
-- The taxonomy has deliberate flaws and overlaps. Some intents are close to each other. Do not assume the starter taxonomy, the starter code, or the starter numbers are correct.
+In Step 2, manual inspection of 149 error rows across the top 5 confused pairs on `dev.csv` (`results/error_analysis/errors_top_pairs.csv`) showed that **66%–83% of remaining disagreements on `dev.csv` are corrupted silver labels in `dev.csv` itself**:
+- `order_status <-> delivery_delay` (**25/30 = 83% silver noise**): e.g., `"ORDER STATUS PLEASE PLEASE HELP"` and `"where is my order"` are labelled `delivery_delay` in `dev.csv`, while `"order still not here after 90 mins"` is labelled `order_status`.
+- `delivery_delay <-> cancel_order` (**22/30 = 73% silver noise**): pure lateness complaints (`"You promised 30 minutes, it's been 75 pls"`, `"eta was 7 pm and i'rs 8 abhi"`) carry silver label `cancel_order` in violation of Rule 4.
+- `payment_failed <-> promo_code_issue` (**20/30 = 67% silver noise**) and `missing_item <-> wrong_item` (**15/29 = 52% silver noise**): e.g., `"free delivery offer not applied"` is labelled `payment_failed`, and `"I asked for veg and got non-veg"` is labelled `missing_item`.
+Because ~9–10% of `dev.csv` labels are corrupted, an uncorrupted oracle classifier matching the hidden test rules cannot exceed **~0.90 Macro-F1** when scored against untouched silver `dev.csv`.
 
-## How the hidden test labels are decided
+---
 
-1. Each message gets exactly one label, the intent for the action the customer wants done. If a message asks for several things, the first one asked is the primary request and decides the label. Example: "where is my order, and also I want a refund" is `order_status`, because the first thing asked is the order's status. Rules 2 and 5 below are the exceptions.
-2. If the customer changes their mind, the last request wins ("cancel it... actually never mind, where is it?" is `order_status`).
-3. Cancel plus refund: an order not yet delivered is `cancel_order`, a delivered one is `refund_request`.
-4. A complaint with no request is labelled by the problem: late is `delivery_delay`, something absent is `missing_item`, something different is `wrong_item`.
-5. Asking only for a human or escalation is `talk_to_agent`. If another request is also present, the other request wins.
-6. Anything not about QuickCart orders, accounts or payments is `out_of_scope`. That includes small talk, gibberish, other companies' services, and services QuickCart does not offer (for example gift cards, loyalty points, tax invoices, tipping riders, restaurant feedback). A greeting or thanks alone is `out_of_scope`. A greeting plus a real request takes the request's label.
-7. Filler, emotion and unrelated detail never change the label.
-8. Order IDs, amounts and item names never change the label.
+## 6. Which Earlier README Claims Held vs. Did Not Hold
 
-## What to do
-
-There is no single right path. A strong submission usually covers:
-
-- **Find and quantify problems.** Read real errors, group them, count them. Check the taxonomy, the labels, the evaluation code and the baseline code.
-- **Improve the system.** Fix what you find. Show before and after numbers on dev (and be clear about how dev can mislead you).
-- **Make choices with evidence.** If you pick a model, a representation, or a threshold, show the data that backed the choice. "It is popular" is not evidence.
-- **Report honestly.** Say what did not work and what you could not verify.
-
-Finding bugs in the starter code and quantifying their effect, and proposing concrete next steps with numbers, counts as much as accuracy.
-
-## Compute budget
-
-**Your final system must fit a production ceiling of 4 CPU cores and 15 GB RAM.** Assume that is the machine it will run on, answering messages one at a time in real time.
-
-- You may use a GPU (or any other compute) while you experiment, train or label. That is fine.
-- But whatever you propose as the final system has to be runnable within the 4-core, 15 GB budget at inference time. State clearly what runs where.
-- Report the latency per message you measured, on what hardware, and your estimate for the 4-core, 15 GB box.
-- Hosted APIs that serve open-source models are allowed. Say which you used, what for, and what that would mean in production (cost, latency, reliability). Do not send anything that is not in this repo.
-- Fine-tuning is allowed, but treat it as a small part of the story, not the main one.
-
-## Ground rules
-
-- **The use of AI tools is encouraged. Open-source tools are encouraged.** You must be able to explain every line you submit and where an AI tool got something wrong.
-- Do not edit `test.csv`. Do not train on test. You have no test labels, so do not try to infer them.
-- Expected effort is **4 to 6 hours spread over the window**. Nobody needs an all-nighter. A smaller, well-evidenced result beats a large unfocused one.
-- **Questions or clarifications about anything in this task:** reach out to Abhivanth directly, on the channel you received this task on. Asking is fine and does not count against you.
-
-## Hints and insights
-
-These are starting points, not instructions. We have not verified them, so check quality, licenses and cost yourself.
-
-- Look at what the matcher actually knows about each intent. Would that be enough for a new human agent to tell two similar intents apart? What would you add to help them?
-- Two intents have nothing to match against in the taxonomy. What does that tell you about the baseline, and how could you still serve them?
-- A bot answers in real time, on a small machine. Think about which kinds of models respond in a few milliseconds on four cores, what you gain and give up with them compared with slower, heavier ones, and where each belongs in a system.
-- When a model and a label disagree, either could be the one that is wrong. Look at a sample of the disagreements before you decide which.
-- The taxonomy examples and the data were not created independently. Check how they relate before you trust a score.
-- Accuracy hides a lot. Break results down by class, by message length, by language mix and by how many requests a message makes.
-- Sentence-embedding models are one route. People use small MiniLM-style, BGE-small, E5-small and multilingual models. Compare options on this data, and report latency too.
-- Measure how close intents are to each other (distances between intent representations) and relate that to your confusion matrix.
-- The "unknown" decision is a model of its own. How would you set and test it?
-- Estimate label noise, for example by cross-validated disagreement or a manual audit of a sample with a confidence interval.
-- Use the training data, not only the taxonomy examples, and compare the two under the same compute.
-- Optional: handle Hinglish more deliberately. Quality beats breadth, one thing done well is enough.
-
-## What to submit
-
-By **EOD Nov 9**, send the person who gave you this task:
-
-1. A link to your GitHub repo (or a zip) with your code and a clear commit history.
-2. `submissions/<your_name>_predictions.csv` in the format described in `submissions/README.md`.
-3. A write-up, **maximum 2 pages**, covering: the biggest problems you found, what you changed with before and after numbers, what you tried that did not work, the limits of your evaluation, your latency and compute notes against the 4-core, 15 GB budget, and what you would do next.
-4. **Your findings, benchmarks and results as CSVs or simple tables** (for example in a `results/` folder in your repo, and summarised in the write-up). Make them easy to read: one row per experiment or per class, clear column names, and a before and after comparison wherever you changed something. How clearly you communicate your results is part of how we judge the work.
-5. A **prompt log** (`prompt_log.md` in your repo, or an exported chat history): every prompt you gave AI tools for this task, in order, with a one-line note on what you did with the answer. Mark answers that were wrong or that you rejected. Do not tidy it up. We read it to understand how you work, not to catch you out.
-
-## What happens next
-
-We score your predictions on the hidden test set (per-class precision, recall and F1, macro-F1, accuracy) and read your write-up, prompt log and code. The score is one signal. The reasoning behind it matters more. Candidates who submit will get a 20 to 30 minute discussion on **Nov 10** about their work. Final results go out at the end of next week.
+- **Held**: (1) Fixing `baseline/eval.py` and zero-shot taxonomy blindspots is foundational; (2) `word (1,2) + char_wb (2,5)` subword features absorb heavy generator typos and Romanised Hinglish; (3) OOF consensus noise down-weighting (`0.25` on 1,426 rows; 98% true errors in 100-row audit) consistently improves 5-fold OOF and Dev across all 3 seeds.
+- **Did NOT Hold (Rejected with Evidence)**: (1) **Claim that `all-MiniLM-L6-v2` + MLP outperforms lexical matching**: once the lexical head was properly tuned with `CalibratedLinearSVC(C=0.5)` (`0.8651` Dev alone), it beat the standalone `MiniLM + MLP` head (`0.7946`) by `+7.05` points, and adding MLP fusion failed the 1,000-resample bootstrap pruning rule (`95% CI vs. B: [-0.0020, +0.0019]`) while costing `+5.6 ms` to `+10.5 ms` CPU latency; (2) **Claim that the SCD partition (`s2_train_partition.csv`) helps**: SCD dropped 4,687 rows (up to 50% of minority classes) and hurt Dev Macro-F1 by `-0.99` points (`0.8783` vs. `0.8882`); (3) **Claim that `"but"`, bare `"also"`, and bare `"instead"` are valid clause splitters**: cue-level auditing proved they destroyed contrastive single requests and chitchat filler; removing them produced our largest real accuracy jump (`+2.37` pts overall, `+17.31` pts on multi-request).
