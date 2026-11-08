@@ -1,0 +1,13 @@
+assigned_label,account_help,cancel_order,change_address,delivery_delay,missing_item,order_status,out_of_scope,payment_failed,promo_code_issue,refund_request,talk_to_agent,wrong_item
+account_help,94,13,145,13,12,23,26,17,1,14,28,2
+cancel_order,2,2861,21,159,19,52,11,28,0,71,25,16
+change_address,9,17,1665,26,16,27,24,17,1,17,26,17
+delivery_delay,0,125,21,3767,22,344,18,23,2,20,24,19
+missing_item,1,17,15,29,1970,39,16,19,3,85,26,58
+order_status,3,42,16,179,21,4019,21,22,2,23,24,11
+out_of_scope,6,16,10,14,9,25,2830,15,0,18,53,15
+payment_failed,4,20,17,36,19,34,28,2257,7,82,28,15
+promo_code_issue,0,17,7,15,12,8,9,92,119,15,20,11
+refund_request,0,123,23,31,82,40,26,99,2,3174,30,68
+talk_to_agent,1,16,18,31,13,28,271,11,1,22,1704,12
+wrong_item,2,24,18,20,88,24,18,18,1,90,23,1404

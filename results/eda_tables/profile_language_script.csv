@@ -1,0 +1,4 @@
+split,total,English_share,Hinglish_mixed_share,Hindi_roman_pure_share,Devanagari_share
+train,30000,0.8718,0.1282,0.0,0.0
+dev,4000,0.869,0.131,0.0,0.0
+test,3000,0.8573,0.1427,0.0,0.0

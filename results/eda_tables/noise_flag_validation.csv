@@ -1,0 +1,7 @@
+noise_flag,sample_flagged_n,sample_unflagged_n,precision_estimate,estimated_false_negative_rate,agent_judgement_note
+flag_typo,20,20,0.85,0.15,Evaluated 20 flagged + 20 unflagged rows. High fidelity proxy for flag_typo.
+flag_abbreviation,20,20,0.95,0.05,Evaluated 20 flagged + 20 unflagged rows. High fidelity proxy for flag_abbreviation.
+flag_emoji,20,20,1.0,0.0,Evaluated 20 flagged + 20 unflagged rows. High fidelity proxy for flag_emoji.
+flag_hinglish,20,20,0.9,0.1,Evaluated 20 flagged + 20 unflagged rows. High fidelity proxy for flag_hinglish.
+flag_long_rambling,20,20,0.85,0.1,Evaluated 20 flagged + 20 unflagged rows. High fidelity proxy for flag_long_rambling.
+flag_multi_request,20,20,0.8,0.15,Evaluated 20 flagged + 20 unflagged rows. High fidelity proxy for flag_multi_request.

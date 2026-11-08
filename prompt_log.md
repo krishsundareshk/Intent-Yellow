@@ -36,3 +36,19 @@
   6. Verified consistency of metrics in `results/eda/dashboard_checks.md`.
   7. Committed all changes and pushed branch `EDA` to origin.
 - **Decisions / Adjustments**: Replaced agent judgement annotations with statistical cross-validation metrics across all 30k rows to provide objective validation data.
+
+## Entry 5: Dark Theme Dashboard with Evidence Plots & Dedicated Tables Folder
+- **User Request**: For critical problems identified, back it up with evidence with plots and other things; build a clean dashboard in dark theme; identify proper problems and keep generated CSV files in a separate folder; build a clean artifact for the dashboard.
+- **Action**:
+  1. Created dedicated tables directory `results/eda_tables/` and moved all generated CSV and JSON evaluation/profile files into it.
+  2. Synthesized quantitative evidence for Problem 1 (`baseline/eval.py` evaluation bug) comparing reported buggy metrics vs. true aligned metrics in `results/eda_tables/eval_bug_evidence.csv`.
+  3. Reconstructed `eda/build_dashboard.py` and regenerated `results/eda/dashboard.html` with a modern dark theme (`#0b0f19` background, `#111827` cards, `#38bdf8` accent), embedding 6 interactive visual evidence plots using Chart.js:
+     - Buggy reported F1 vs true ground-truth F1 by intent.
+     - Taxonomy seed examples distribution showing zero-shot blindspots.
+     - Train vs Dev class imbalance distribution.
+     - Out-of-fold disagreement rate per class.
+     - Prevalence of 6 noise types across train/dev/test splits.
+     - Semantic cosine similarity between closest intent pairs.
+  4. Added detailed evidence callouts and analytical interpretations to every tab.
+  5. Created artifact `eda_evidence_dashboard.md` summarizing problems, evidence, and roadmap.
+  6. Committed all files to branch `EDA` and pushed to GitHub.

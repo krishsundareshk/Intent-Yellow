@@ -1,0 +1,4 @@
+split,total_messages,flag_typo_count,flag_typo_share,flag_abbreviation_count,flag_abbreviation_share,flag_emoji_count,flag_emoji_share,flag_hinglish_count,flag_hinglish_share,flag_long_rambling_count,flag_long_rambling_share,flag_multi_request_count,flag_multi_request_share
+train,30000,2015,0.0672,6747,0.2249,676,0.0225,4204,0.1401,3652,0.1217,2958,0.0986
+dev,4000,276,0.069,878,0.2195,101,0.0253,563,0.1407,468,0.117,398,0.0995
+test,3000,192,0.064,651,0.217,65,0.0217,464,0.1547,354,0.118,277,0.0923

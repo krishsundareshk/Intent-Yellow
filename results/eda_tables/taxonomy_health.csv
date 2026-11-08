@@ -1,0 +1,13 @@
+label,n_taxonomy_examples,train_support,definition,top_overlapping_label,recommended_action,reason
+order_status,13,4383,User intent concerning order status,delivery_delay (sim: 0.5705),keep with delay rule logic,Queries often blend status inquiry with delay complaints
+delivery_delay,10,4385,User intent concerning delivery delay,order_status (sim: 0.5705),keep with delay rule logic,Queries often blend status inquiry with delay complaints
+cancel_order,8,3265,User intent concerning cancel order,order_status (sim: 0.525),keep,Well-defined intent boundary
+refund_request,9,3698,User intent concerning refund request,promo_code_issue (sim: 0.4516),keep,Well-defined intent boundary
+missing_item,7,2278,User intent concerning missing item,wrong_item (sim: 0.5571),keep with strict disambiguation,Frequent semantic overlap in complaints (e.g. incomplete orders)
+wrong_item,8,1730,User intent concerning wrong item,missing_item (sim: 0.5571),keep with strict disambiguation,Frequent semantic overlap in complaints (e.g. incomplete orders)
+payment_failed,8,2547,User intent concerning payment failed,promo_code_issue (sim: 0.6441),keep,Well-defined intent boundary
+promo_code_issue,0,325,User intent concerning promo code issue,payment_failed (sim: 0.6441),keep & add examples,Zero taxonomy seed examples provided; matcher cannot classify without train examples
+change_address,7,1862,User intent concerning change address,account_help (sim: 0.8051),keep,Well-defined intent boundary
+account_help,0,388,User intent concerning account help,change_address (sim: 0.8051),keep & add examples,Zero taxonomy seed examples provided; matcher cannot classify without train examples
+talk_to_agent,8,2128,User intent concerning talk to agent,out_of_scope (sim: 0.5245),keep,Well-defined intent boundary
+out_of_scope,14,3011,User intent concerning out of scope,account_help (sim: 0.5566),keep,Well-defined intent boundary
