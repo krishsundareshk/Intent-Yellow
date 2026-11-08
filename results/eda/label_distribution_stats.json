@@ -1,9 +1,0 @@
-{
-  "imbalance_ratio": 13.4923,
-  "normalized_entropy": 0.9366,
-  "gini_coefficient": 0.2898,
-  "chisquare_stat": 1144.1892,
-  "chisquare_p_value": 1.7204277099951494e-238,
-  "long_tail_verdict": "Moderate long tail / Imbalanced head-to-tail (ratio 13.5x: top intent 4,385 vs bottom 325)",
-  "explanation": "Account_help and promo_code_issue have <400 samples each (~1% share each), while top 2 intents account for ~29.2% of data."
-}

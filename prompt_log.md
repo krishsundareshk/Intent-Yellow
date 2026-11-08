@@ -52,3 +52,12 @@
   4. Added detailed evidence callouts and analytical interpretations to every tab.
   5. Created artifact `eda_evidence_dashboard.md` summarizing problems, evidence, and roadmap.
   6. Committed all files to branch `EDA` and pushed to GitHub.
+
+## Entry 6: Re-running Baseline, Metrics Verification & De-duplicating CSVs
+- **User Request**: Run the baseline again and verify the metrics and delete unnecessary files.
+- **Action**:
+  1. Ran `python3 -m baseline.eval` on dev set (4,000 rows): reproduced Top-1 Accuracy: `0.423`, Top-3 Accuracy: `0.720`, MRR: `0.666`, Macro-F1: `0.446`. Verified consistent execution against `results/baseline_dev.json`.
+  2. Ran `python3 -m baseline.baseline` to regenerate `submissions/baseline_predictions.csv` (3,000 predictions).
+  3. Cleaned and deduplicated files: deleted redundant copies of CSV and JSON files from `results/eda/` so that all tables reside cleanly and exclusively in `results/eda_tables/`.
+  4. Removed transient `__pycache__` artifacts.
+  5. Committed changes and pushed to branch `EDA`.

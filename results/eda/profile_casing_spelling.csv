@@ -1,4 +1,0 @@
-all_upper_share,all_lower_share,mixed_casing_share,elongated_chars_share,split
-0.034,0.5157,0.4504,0.0348,train
-0.0338,0.518,0.4482,0.038,dev
-0.0307,0.507,0.4623,0.036,test

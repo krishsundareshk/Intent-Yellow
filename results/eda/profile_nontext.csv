@@ -1,4 +1,0 @@
-has_emoji_share,avg_emoji_count,has_order_id_share,has_digits_share,avg_punct_count,avg_punct_density,split
-0.0225,0.0389,0.1078,0.182,2.11,0.0369,train
-0.0253,0.0432,0.0915,0.162,2.02,0.0363,dev
-0.0217,0.0377,0.0827,0.1607,2.09,0.0374,test

@@ -1,9 +1,0 @@
-rule_number,rule_name,covered_in_taxonomy_examples,evidence
-1,Primary request wins (first action),No,Taxonomy examples are strictly single-phrase; zero compound/multi-request examples.
-2,Mind-change rule (last request wins),No,"No examples containing 'scratch that', 'actually never mind', or correction syntax."
-3,Cancel vs. Refund (delivery status decides),Partial,Refund examples mention cold/inedible food; cancellation examples mention 'before prepared'.
-4,Complaints without request categorized by issue,Yes,"'delivery late, I am really hungry', 'you promised 30 min, its been 75' under delivery_delay."
-5,Agent escalation overridden if request present,No,All talk_to_agent examples ask exclusively for human agents.
-6,Out-of-scope boundary (unsupported features/gibberish),Partial,"Examples cover general QA ('capital of France', 'buy laptop') but lack QuickCart unsupported queries (gift cards, tips)."
-7,Filler & emotion do not change label,No,Examples are concise and clean; no narrative filler sentences.
-8,Order IDs & numbers do not change label,No,Taxonomy examples do not include synthetic QC order IDs or amounts.
