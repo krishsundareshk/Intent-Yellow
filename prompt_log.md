@@ -83,3 +83,7 @@
   4. In S4.4, Sahayam hard-batch retraining (`delta=0.5`) slightly hurts frozen-embedding MLP heads (`0.7899` vs `0.7969` plain) because the remaining "hard" bucket still contains unflagged silver label noise that gets overfit.
   5. In S4.5, unstandardized logit fusion sets `alpha = 0.9` toward the lexical head, drowning out the semantic head unless logits are z-normalized before fusion.
   6. Evaluating S3 Rule Repair + Online Clause Path against uncorrected silver `dev.csv` creates a "Silver Evaluation Illusion" because `dev.csv` violates README Rules 1/2/3/5/6 on 157 rows (3.92%, especially Mind-Change Rule 2). On rule-audited Gold Dev, the Online Clause Path boosts Mind-Change F1 from `0.4664` to `0.9167` and overall Macro-F1 to `0.8915`.
+
+## Entry 9: Comprehensive Markdown Report on Experiments, Architectures, Results & Flaws
+- **User Request**: Give me a markdown file with all the information on experiments and architectures, results, flaws and other things as well.
+- **Action**: Compiled and saved `experiments_and_architecture.md` in the root `/home/krish/Yellow/` directory covering the headline progression, dataset/taxonomy/starter bugs, System Design v1 architecture (S0-S8), full empirical tables (S1 encoder gate, S2 partition & 10% flip sanity check, S3 Snorkel cue stats, S7 per-class & slice benchmarks), the 6 diagnosed flaws/bottlenecks with Silver-vs-Gold proof, and S6 4-core CPU latency/quantization benchmarks. Committed and pushed to branch `EDA`.
