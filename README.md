@@ -90,3 +90,14 @@ Because ~9–10% of `dev.csv` labels are corrupted, an uncorrupted oracle classi
 
 - **Held**: (1) Fixing `baseline/eval.py` and zero-shot taxonomy blindspots is foundational; (2) `word (1,2) + char_wb (2,5)` subword features absorb heavy generator typos and Romanised Hinglish; (3) OOF consensus noise down-weighting (`0.25` on 1,426 rows; 98% true errors in 100-row audit) consistently improves 5-fold OOF and Dev across all 3 seeds.
 - **Did NOT Hold (Rejected with Evidence)**: (1) **Claim that `all-MiniLM-L6-v2` + MLP outperforms lexical matching**: once the lexical head was properly tuned with `CalibratedLinearSVC(C=0.5)` (`0.8651` Dev alone), it beat the standalone `MiniLM + MLP` head (`0.7946`) by `+7.05` points, and adding MLP fusion failed the 1,000-resample bootstrap pruning rule (`95% CI vs. B: [-0.0020, +0.0019]`) while costing `+5.6 ms` to `+10.5 ms` CPU latency; (2) **Claim that the SCD partition (`s2_train_partition.csv`) helps**: SCD dropped 4,687 rows (up to 50% of minority classes) and hurt Dev Macro-F1 by `-0.99` points (`0.8783` vs. `0.8882`); (3) **Claim that `"but"`, bare `"also"`, and bare `"instead"` are valid clause splitters**: cue-level auditing proved they destroyed contrastive single requests and chitchat filler; removing them produced our largest real accuracy jump (`+2.37` pts overall, `+17.31` pts on multi-request).
+
+---
+
+## 7. Deep-Dive Technical Documentation (`docs/`)
+
+- [`docs/00_INDEX.md`](docs/00_INDEX.md): Overview, documentation map, and summary metrics table.
+- [`docs/01_EDA_AND_DATA_PATHOLOGIES.md`](docs/01_EDA_AND_DATA_PATHOLOGIES.md): Baseline evaluation bug, zero-shot taxonomy blindspots, 4.5$\times$ class-prior shift, 28% minority-class noise in `train.csv`, and the 149-row manual audit proving the `~0.89–0.90` untouched silver ceiling on `dev.csv`.
+- [`docs/02_SYSTEM_ARCHITECTURE_AND_DESIGN.md`](docs/02_SYSTEM_ARCHITECTURE_AND_DESIGN.md): End-to-end architecture diagrams, why `FeatureUnion(word 1–2, char_wb 2–5) + CalibratedLinearSVC(C=0.5)` outperforms `all-MiniLM-L6-v2 + MLP` by `+7.05` points, bootstrap pruning of the neural head, and single-call batched clause vectorization.
+- [`docs/03_IMPLEMENTATION_AND_RULE_ENGINE.md`](docs/03_IMPLEMENTATION_AND_RULE_ENGINE.md): Implementation walkthrough of `preprocess.py`, `src/clause_router.py`, and `src/model.py`, including the 100-row cue audit that caught the `"but"`, bare `"also"`, and bare `"instead"`/`"actually"` bugs and how Rules 1–5 are resolved deterministically.
+- [`docs/04_EXPERIMENTS_ABLATIONS_AND_EVIDENCE.md`](docs/04_EXPERIMENTS_ABLATIONS_AND_EVIDENCE.md): 5-fold `StratifiedGroupKFold` protocol, OOF consensus noise filter (`1,426` rows, `98/100` verified errors), 33-config lexical sweep, 8-system controlled ablation (`Systems A–H`), calibration/ECE/$\tau$ sweeps, slice breakdowns, and 4-core CPU latency benchmarks.
+
